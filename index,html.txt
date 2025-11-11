@@ -10,6 +10,11 @@
             <option value="land">Land</option>
             <option value="garage">Garage</option>
         </select>
+        <select id="filter-action" data-key="filter-action">
+            <option value="all">Rent or Buy</option>
+            <option value="rent">Rent</option>
+            <option value="buy">Buy</option>
+        </select>
         <select id="filter-rooms">
             <option value="all">Rooms</option>
             <option value="1">1</option>
@@ -31,10 +36,6 @@
             <option value="100-200">100 - 200 m²</option>
             <option value="200+">200+ m²</option>
         </select>
-        <div class="action-buttons">
-            <button id="rent-btn" class="action-btn active" data-action="rent">Rent</button>
-            <button id="buy-btn" class="action-btn" data-action="buy">Buy</button>
-        </div>
         <button id="apply-filters" data-key="apply-filters">Search</button>
     </div>
     <!-- ... (rest of the listings section remains the same) -->
