@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "title": "Modern Apartment in Gueliz",
+    "type": "apartment",
+    "action": "rent",
+    "price": 5000,
+    "priceText": "5000 MAD/month",
+    "location": "Gueliz",
+    "rooms": 2,
+    "surface": 80,
+    "description": "Bright 2-bedroom apartment in the heart of Gueliz — walking distance to cafes, secure entry, modern kitchen.",
+    "images": [
+      "images/apartment_gueliz.jpg"
+    ],
+    "agent": {
+      "name": "Leila B.",
+      "phone": "+212 600 111 222"
+    },
+    "created_at": 1762974974581
+  },
+  {
+    "id": 2,
+    "title": "Luxury Villa in Palmeraie",
+    "type": "villa",
+    "action": "buy",
+    "price": 2500000,
+    "priceText": "2,500,000 MAD",
+    "location": "Palmeraie",
+    "rooms": 6,
+    "surface": 450,
+    "description": "Private villa with infinity pool, mature gardens and guest house.",
+    "images": [
+      "images/villa_palmeraie_1.jpg",
+      "images/villa_palmeraie_2.jpg"
+    ],
+    "agent": {
+      "name": "Youssef"
+    },
+    "created_at": 1762974974581
+  }
+]
