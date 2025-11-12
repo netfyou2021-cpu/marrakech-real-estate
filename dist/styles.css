@@ -1,0 +1,5 @@
+/* Minimal copy of styles for dist */
+body{font-family:Roboto,Arial,sans-serif;margin:0;color:#222}
+.logo{padding:1rem;font-weight:600}
+main{padding:1rem}
+#property-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}

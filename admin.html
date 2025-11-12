@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Real Estate at Marrakech — Admin</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">Real Estate at Marrakech</div>
+      <ul>
+        <li><a href="/">Site</a></li>
+        <li><a href="#listings">Listings</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Admin — i18n Editor</h1>
+    <p>Use this page to preview and POST updated i18n JSON to <code>/api/i18n</code> (requires <code>x-admin-token</code> header).</p>
+    <textarea id="i18n-editor" style="width:100%;height:360px;font-family:monospace"></textarea>
+    <div style="margin-top:.5rem">
+      <button id="load">Load</button>
+      <button id="save">Save (POST)</button>
+      <button id="reset">Reset</button>
+    </div>
+    <pre id="status" style="margin-top:.5rem;color:#333"></pre>
+  </main>
+
+  <script>
+    async function load(){
+      const res = await fetch('/api/i18n');
+      const j = await res.json();
+      document.getElementById('i18n-editor').value = JSON.stringify(j,null,2);
+      document.getElementById('status').textContent = 'Loaded';
+    }
+    document.getElementById('load').addEventListener('click', load);
+    document.getElementById('save').addEventListener('click', async ()=>{
+      try{
+        const payload = JSON.parse(document.getElementById('i18n-editor').value);
+        const res = await fetch('/api/i18n',{method:'POST',headers:{'Content-Type':'application/json','x-admin-token':'dev-token'},body:JSON.stringify(payload)});
+        const data = await res.json();
+        document.getElementById('status').textContent = 'Saved: ' + (data && data.ui ? 'OK' : JSON.stringify(data));
+      }catch(e){ document.getElementById('status').textContent = 'Error: ' + e.message }
+    });
+    document.getElementById('reset').addEventListener('click', ()=>{ document.getElementById('i18n-editor').value = ''; document.getElementById('status').textContent=''; });
+    // auto-load
+    load().catch(()=>{})
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Real Estate at Marrakech</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">Real Estate at Marrakech</div>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#listings">Listings</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="home" class="hero">
+    <h1>Find Your Dream Property in Marrakech</h1>
+    <p>Rent or buy apartments, villas, lands, and garages.</p>
+  </section>
+
+  <section id="filters-section">
+    <div class="filters-container">
+      <input type="text" id="search-input" placeholder="Search by location or keyword (e.g., Gueliz)" />
+
+      <select id="filter-type">
+        <option value="all">All Types</option>
+        <option value="apartment">Apartment</option>
+        <option value="villa">Villa</option>
+        <option value="land">Land</option>
+        <option value="garage">Garage</option>
+      </select>
+
+      <select id="filter-action">
+        <option value="all">Rent or Buy</option>
+        <option value="rent">Rent</option>
+        <option value="buy">Buy</option>
+      </select>
+
+      <select id="filter-price">
+        <option value="all">Price (MAD)</option>
+        <option value="0-10000">0 - 10,000</option>
+        <option value="10000-50000">10,000 - 50,000</option>
+        <option value="50000-200000">50,000 - 200,000</option>
+        <option value="200000+">200,000+</option>
+      </select>
+
+      <select id="filter-rooms">
+        <option value="all">Rooms</option>
+        <option value="1">1+</option>
+        <option value="2">2+</option>
+        <option value="3">3+</option>
+        <option value="4">4+</option>
+      </select>
+
+      <select id="filter-surface">
+        <option value="all">Surface (m²)</option>
+        <option value="0-50">0 - 50</option>
+        <option value="50-100">50 - 100</option>
+        <option value="100-200">100 - 200</option>
+        <option value="200+">200+</option>
+      </select>
+
+      <select id="sort-by">
+        <option value="none">Sort By</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="rooms-asc">Rooms: Low to High</option>
+        <option value="surface-asc">Surface: Low to High</option>
+      </select>
+    </div>
+  </section>
+
+  <section id="listings">
+    <div id="property-grid" class="property-grid"></div>
+    <div id="pagination" class="pagination"></div>
+  </section>
+
+  <section id="map-section">
+    <h2>Property Locations</h2>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3399.1234!2d-8.0089!3d31.6295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdafef3d!2zTW9yb2NjbywgTW9yb2Njbw!5e0!3m2!1sen!2sus!4v1234567890" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+  </section>
+
+  <footer>
+    <p>© 2025 Real Estate at Marrakech. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
