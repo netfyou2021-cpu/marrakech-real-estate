@@ -99,51 +99,81 @@
       <select id="filter-price">
         <option value="all">Price (MAD)</option>
         <option value="0-10000">0 - 10,000</option>
-        <option value="10000-50000">10,000 - 50,000</option>
-        <option value="50000-200000">50,000 - 200,000</option>
-        <option value="200000+">200,000+</option>
-      </select>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <title>Marrakech — Admin</title>
+          <link rel="stylesheet" href="styles.css" />
+          <style>
+            main{max-width:1100px;margin:1.2rem auto;padding:1rem}
+            .admin-sections{display:grid;grid-template-columns:1fr 380px;gap:1rem}
+            .panel{background:#fff;padding:1rem;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.04)}
+            .listing-row{display:flex;gap:0.6rem;align-items:center;border-bottom:1px solid #f0f0f0;padding:0.6rem 0}
+            .listing-row img{width:80px;height:56px;object-fit:cover;border-radius:6px}
+            .listing-actions button{margin-left:0.4rem}
+            label{display:block;font-size:0.9rem;margin-top:0.5rem}
+            input[type="text"], input[type="number"], textarea{width:100%;padding:0.5rem;border-radius:6px;border:1px solid #eee}
+          </style>
+        </head>
+        <body>
+          <header>
+            <nav>
+              <div class="logo">Marrakech Admin</div>
+              <ul>
+                <li><a href="/">Site</a></li>
+              </ul>
+            </nav>
+          </header>
 
-      <select id="filter-rooms">
-        <option value="all">Rooms</option>
-        <option value="1">1+</option>
-        <option value="2">2+</option>
-        <option value="3">3+</option>
-        <option value="4">4+</option>
-      </select>
+          <main>
+            <h1>Admin Console</h1>
+            <p>Manage listings and translations. Admin requests require the <code>x-admin-token</code> header (default: <code>dev-token</code>).</p>
 
-      <select id="filter-surface">
-        <option value="all">Surface (m²)</option>
-        <option value="0-50">0 - 50</option>
-        <option value="50-100">50 - 100</option>
-        <option value="100-200">100 - 200</option>
-        <option value="200+">200+</option>
-      </select>
+            <div class="admin-sections">
+              <section class="panel">
+                <h2>Listings</h2>
+                <div id="listings-root"></div>
+                <button id="reload-listings">Reload</button>
+              </section>
 
-      <select id="sort-by">
-        <option value="none">Sort By</option>
-        <option value="price-asc">Price: Low to High</option>
-        <option value="price-desc">Price: High to Low</option>
-        <option value="rooms-asc">Rooms: Low to High</option>
-        <option value="surface-asc">Surface: Low to High</option>
-      </select>
-    </div>
-  </section>
+              <aside class="panel">
+                <h3>Create / Edit Listing</h3>
+                <form id="listing-form">
+                  <input type="hidden" id="listing-id">
+                  <label>Title <input id="listing-title" type="text"></label>
+                  <label>Type <input id="listing-type" type="text" placeholder="apartment / villa / land / garage"></label>
+                  <label>Action <input id="listing-action" type="text" placeholder="rent / buy"></label>
+                  <label>Price <input id="listing-price" type="number"></label>
+                  <label>Price text <input id="listing-priceText" type="text"></label>
+                  <label>Location <input id="listing-location" type="text"></label>
+                  <label>Rooms <input id="listing-rooms" type="number"></label>
+                  <label>Surface <input id="listing-surface" type="number"></label>
+                  <label>Images (comma-separated URLs) <input id="listing-images" type="text" placeholder="https://... , https://..." /></label>
+                  <label>Description <textarea id="listing-description" rows="4"></textarea></label>
+                  <div style="margin-top:.5rem">
+                    <button id="save-listing" type="button">Save</button>
+                    <button id="delete-listing" type="button">Delete</button>
+                    <button id="clear-form" type="button">Clear</button>
+                  </div>
+                  <div id="listing-status" style="margin-top:.5rem;color:#333"></div>
+                </form>
+              </aside>
+            </div>
 
-  <section id="listings">
-    <div id="property-grid" class="property-grid"></div>
-    <div id="pagination" class="pagination"></div>
-  </section>
+            <section class="panel" style="margin-top:1rem">
+              <h2>i18n Editor</h2>
+              <textarea id="i18n-editor" style="width:100%;height:260px;font-family:monospace"></textarea>
+              <div style="margin-top:.5rem">
+                <input id="admin-token" placeholder="admin token (default: dev-token)" />
+                <button id="load-i18n">Load</button>
+                <button id="save-i18n">Save (POST)</button>
+              </div>
+              <pre id="i18n-status" style="margin-top:.5rem;color:#333"></pre>
+            </section>
+          </main>
 
-  <section id="map-section">
-    <h2>Property Locations</h2>
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3399.1234!2d-8.0089!3d31.6295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdafef3d!2zTW9yb2NjbywgTW9yb2Njbw!5e0!3m2!1sen!2sus!4v1234567890" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-  </section>
-
-  <footer>
-    <p>© 2025 Real Estate at Marrakech. All rights reserved.</p>
-  </footer>
-
-  <script src="script.js"></script>
-</body>
-</html>
+          <script src="admin.js"></script>
+          </body>
+          </html>

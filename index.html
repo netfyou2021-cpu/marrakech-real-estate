@@ -21,100 +21,104 @@
                 <option value="fr">Français</option>
                 <option value="ar">العربية</option>
             </select>
-        </nav>
-    </header>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Marrakech Real Estate - Find Your Property</title>
+            <link rel="stylesheet" href="styles.css">
+            <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+        </head>
+        <body>
+            <header>
+                <nav>
+                    <div class="logo">Marrakech Realty</div>
+                    <ul>
+                        <li><a href="#home" data-key="home">Home</a></li>
+                        <li><a href="#listings" data-key="listings">Listings</a></li>
+                        <li><a href="#contact" data-key="contact">Contact</a></li>
+                    </ul>
+                    <select id="language-select">
+                        <option value="en">English</option>
+                        <option value="fr">Français</option>
+                        <option value="ar">العربية</option>
+                    </select>
+                </nav>
+            </header>
     
-    <section id="home" class="hero">
-        <h1 data-key="hero-title">Find Your Dream Property in Marrakech</h1>
-        <p data-key="hero-subtitle">Rent or buy apartments, villas, lands, and garages with ease.</p>
-        <div class="search-bar">
-            <input type="text" id="search-input" placeholder="Search by location or keyword (e.g., Gueliz)" data-key="search-placeholder">
-            <button id="search-btn" data-key="search-btn">Search</button>
-        </div>
-    </section>
+            <section id="home" class="hero">
+                <div class="hero-inner">
+                    <h1 data-key="heroTitle">Find Your Dream Property in Marrakech</h1>
+                    <p data-key="heroSubtitle">Rent or buy apartments, villas, lands, and garages with ease.</p>
+                    <div class="search-bar">
+                        <input type="text" id="search-input" placeholder="Search by location or keyword (e.g., Gueliz)" data-key="searchPlaceholder">
+                        <button id="search-btn" data-key="searchBtn">Search</button>
+                    </div>
+                </div>
+            </section>
     
-    <section id="listings">
-        <h2 data-key="listings-title">Browse Properties</h2>
-        <div class="filters">
-            <div class="filter-group">
-                <select id="filter-type" data-key="filter-type">
-                    <option value="all">All Types</option>
-                    <option value="apartment">Apartment</option>
-                    <option value="villa">Villa</option>
-                    <option value="land">Land</option>
-                    <option value="garage">Garage</option>
-                </select>
-                <select id="filter-action" data-key="filter-action">
-                    <option value="all">Rent or Buy</option>
-                    <option value="rent">Rent</option>
-                    <option value="buy">Buy</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="min-price">Min Price (MAD)</label>
-                <input type="number" id="min-price" min="0">
-                <label for="max-price">Max Price (MAD)</label>
-                <input type="number" id="max-price" min="0">
-            </div>
-            <div class="filter-group">
-                <label for="min-rooms">Min Rooms</label>
-                <input type="number" id="min-rooms" min="0">
-                <label for="max-rooms">Max Rooms</label>
-                <input type="number" id="max-rooms" min="0">
-            </div>
-            <div class="filter-group">
-                <label for="min-surface">Min Surface (m²)</label>
-                <input type="number" id="min-surface" min="0">
-                <label for="max-surface">Max Surface (m²)</label>
-                <input type="number" id="max-surface" min="0">
-            </div>
-            <button id="apply-filters" data-key="apply-filters">Apply Filters</button>
-        </div>
-        <div class="view-toggle">
-            <button id="grid-view" class="active">Grid View</button>
-            <button id="list-view">List View</button>
-        </div>
-        <div class="property-container">
-            <div class="property-grid" id="property-grid">
-                <!-- Listings loaded here -->
-            </div>
-            <div class="map">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3399.1234!2d-8.0089!3d31.6295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdafef3d!2zTW9yb2NjbywgTW9yb2Njbw!5e0!3m2!1sen!2sus!4v1234567890" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                <p data-key="map-note">Map shows general Marrakech locations. Click markers for details.</p>
-            </div>
-        </div>
-    </section>
+            <section id="listings" class="container">
+                <h2 data-key="listingsTitle">Browse Properties</h2>
+                <div class="filters">
+                    <div class="filter-group">
+                        <select id="filter-type" data-key="filterType">
+                            <option value="all">All Types</option>
+                            <option value="apartment">Apartment</option>
+                            <option value="villa">Villa</option>
+                            <option value="land">Land</option>
+                            <option value="garage">Garage</option>
+                        </select>
+                        <select id="filter-action" data-key="filterAction">
+                            <option value="all">Rent or Buy</option>
+                            <option value="rent">Rent</option>
+                            <option value="buy">Buy</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <input type="number" id="min-price" placeholder="Min price" min="0">
+                        <input type="number" id="max-price" placeholder="Max price" min="0">
+                    </div>
+                    <div class="filter-group">
+                        <input type="number" id="min-rooms" placeholder="Min rooms" min="0">
+                        <input type="number" id="max-rooms" placeholder="Max rooms" min="0">
+                    </div>
+                    <div class="filter-group">
+                        <input type="number" id="min-surface" placeholder="Min surface" min="0">
+                        <input type="number" id="max-surface" placeholder="Max surface" min="0">
+                    </div>
+                    <button id="apply-filters" data-key="applyFilters">Apply Filters</button>
+                </div>
+                <div class="view-toggle">
+                    <button id="grid-view" class="active">Grid View</button>
+                    <button id="list-view">List View</button>
+                </div>
+                <div class="property-container">
+                    <div class="property-grid" id="property-grid">
+                        <!-- Listings loaded here -->
+                    </div>
+                    <aside class="map">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3399.1234!2d-8.0089!3d31.6295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdafef3d!2zTW9yb2NjbywgTW9yb2Njbw!5e0!3m2!1sen!2sus!4v1234567890" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                        <p data-key="mapNote">Map shows general Marrakech locations. Click markers for details.</p>
+                    </aside>
+                </div>
+            </section>
     
-    <footer>
-        <p data-key="footer">© 2025 Marrakech Realty. All rights reserved.</p>
-    </footer>
+            <footer>
+                <p data-key="footer">© 2025 Marrakech Realty. All rights reserved.</p>
+            </footer>
+
+            <!-- Detail modal -->
+            <div id="detail-modal" class="modal" aria-hidden="true">
+              <div class="modal-content">
+                <button id="modal-close" class="modal-close">×</button>
+                <div id="modal-body"></div>
+              </div>
+            </div>
     
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Marrakech Real Estate - Find Your Property</title>
-        <link rel="stylesheet" href="styles.css">
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-    </head>
-    <body>
-        <header>
-            <nav>
-                <div class="logo">Marrakech Realty</div>
-                <ul>
-                    <li><a href="#home" data-key="home">Home</a></li>
-                    <li><a href="#listings" data-key="listings">Listings</a></li>
-                    <li><a href="#contact" data-key="contact">Contact</a></li>
-                </ul>
-                <select id="language-select">
-                    <option value="en">English</option>
-                    <option value="fr">Français</option>
-                    <option value="ar">العربية</option>
-                </select>
-            </nav>
-        </header>
-    
+            <script src="script.js"></script>
+        </body>
+        </html>
         <section id="home" class="hero">
             <div class="hero-inner">
                 <h1 data-key="heroTitle">Find Your Dream Property in Marrakech</h1>
