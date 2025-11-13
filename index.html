@@ -28,16 +28,45 @@
         <div class="hero-inner">
             <h1 data-key="heroTitle">Find Your Dream Property in Marrakech</h1>
             <p data-key="heroSubtitle">Rent or buy apartments, villas, lands, and garages with ease.</p>
-            <div class="search-bar">
-                <input type="text" id="search-input" placeholder="Search by location or keyword (e.g., Gueliz)" data-key="searchPlaceholder">
-                <button id="search-btn" data-key="searchBtn">Search</button>
-            </div>
         </div>
     </section>
     
     <section id="listings" class="container">
         <h2 data-key="listingsTitle">Browse Properties</h2>
         <div class="filters">
+            <input type="text" id="search-input" class="filter-dropdown search-input" placeholder="🔍 Region, place or street" style="flex:1.5;min-width:200px;">
+            <select id="region-filter" class="filter-dropdown">
+                <option value="">All Regions</option>
+                <optgroup label="City Districts">
+                    <option value="Gueliz">Gueliz</option>
+                    <option value="Hivernage">Hivernage</option>
+                    <option value="Medina">Medina</option>
+                    <option value="Kasbah">Kasbah</option>
+                    <option value="Mellah">Mellah</option>
+                    <option value="Palmeraie">Palmeraie</option>
+                    <option value="Targa">Targa</option>
+                    <option value="Route de Fes">Route de Fes</option>
+                    <option value="Route de Casablanca">Route de Casablanca</option>
+                    <option value="Route de Safi">Route de Safi</option>
+                    <option value="Agdal">Agdal</option>
+                    <option value="Massira">Massira</option>
+                    <option value="Daoudiate">Daoudiate</option>
+                    <option value="Sidi Youssef Ben Ali">Sidi Youssef Ben Ali</option>
+                </optgroup>
+                <optgroup label="Villages & Surroundings">
+                    <option value="Ourika">Ourika</option>
+                    <option value="Amizmiz">Amizmiz</option>
+                    <option value="Tahanaout">Tahanaout</option>
+                    <option value="Asni">Asni</option>
+                    <option value="Imlil">Imlil</option>
+                    <option value="Lalla Takerkoust">Lalla Takerkoust</option>
+                    <option value="Sidi Abdellah Ghiat">Sidi Abdellah Ghiat</option>
+                    <option value="Tameslohte">Tameslohte</option>
+                    <option value="Agafay">Agafay</option>
+                    <option value="Ouarzazate Road">Ouarzazate Road</option>
+                    <option value="Essaouira Road">Essaouira Road</option>
+                </optgroup>
+            </select>
             <select id="filter-type" class="filter-dropdown">
                 <option value="all">Listing type</option>
                 <option value="apartment">Apartment</option>

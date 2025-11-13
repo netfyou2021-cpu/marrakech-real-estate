@@ -152,6 +152,7 @@ function renderListings() {
 async function applyAndLoad() {
   const search = document.getElementById('search-input').value || '';
   const type = document.getElementById('filter-type').value || 'all';
+  const region = document.getElementById('region-filter').value || '';
   const minPrice = document.getElementById('min-price').value || '';
   const minRooms = document.getElementById('min-rooms').value || '';
   const minSurface = document.getElementById('min-surface').value || '';
@@ -159,6 +160,7 @@ async function applyAndLoad() {
   const params = {};
   if (type && type!=='all') params.type = type;
   if (search) params.q = search;
+  if (region) params.q = (params.q ? params.q + ' ' : '') + region;
   if (minPrice) params.minPrice = minPrice;
   if (minRooms) params.minRooms = minRooms;
   if (minSurface) params.minSurface = minSurface;
@@ -180,7 +182,8 @@ function updateMapMarkers() {
   }
 }
 
-document.getElementById('search-btn').addEventListener('click', applyAndLoad);
+document.getElementById('search-input').addEventListener('input', applyAndLoad);
+document.getElementById('region-filter').addEventListener('change', applyAndLoad);
 document.getElementById('filter-type').addEventListener('change', applyAndLoad);
 document.getElementById('favorites-filter').addEventListener('change', renderListings);
 document.getElementById('min-price').addEventListener('change', applyAndLoad);
