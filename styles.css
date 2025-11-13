@@ -17,9 +17,10 @@ nav a{color:var(--muted);text-decoration:none}
 .search-bar input{flex:1;padding:0.6rem;border-radius:6px;border:1px solid rgba(255,255,255,0.25)}
 .search-bar button{background:var(--accent);border:none;color:#fff;padding:0.6rem 1rem;border-radius:6px;cursor:pointer}
 .container{max-width:var(--max-width);margin:1.2rem auto;padding:0 1rem}
-.filters{display:flex;gap:1rem;padding:1rem;background:#fff8ec;border-radius:8px;box-shadow:0 6px 18px rgba(193,75,26,0.06);margin-bottom:1rem;flex-wrap:wrap;align-items:center}
-.filters input,.filters select{padding:0.5rem;border:1px solid #f0c7b0;border-radius:6px;background:#fff}
-.filters button#apply-filters{padding:0.6rem 1rem;background:var(--accent-2);color:#fff;border:none;border-radius:6px;cursor:pointer}
+.filters{display:flex;gap:0.75rem;padding:1rem;background:#fff;border-bottom:1px solid #e8e8e8;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
+.filter-dropdown{padding:0.6rem 2.5rem 0.6rem 1rem;border:1px solid #d0d0d0;border-radius:6px;background:#fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8"><path fill="%23666" d="M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z"/></svg>') no-repeat right 0.75rem center;background-size:12px;appearance:none;cursor:pointer;font-size:0.95rem;color:#333;font-weight:400}
+.filter-dropdown:hover{border-color:#999}
+.filter-dropdown:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 2px rgba(193,75,26,0.1)}
 .view-toggle{display:flex;gap:0.5rem;justify-content:flex-end;margin-bottom:0.5rem}
 .view-toggle button{padding:0.4rem 0.8rem;border-radius:6px;border:1px solid #eee;background:#fff;cursor:pointer}
 .view-toggle button.active{background:var(--accent);color:#fff}
