@@ -3,23 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Real Estate at Marrakech — Admin</title>
+  <title>Atlas Real Estate — Admin Panel</title>
   <link rel="stylesheet" href="styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
 </head>
 <body>
   <header>
     <nav>
-      <div class="logo">Real Estate at Marrakech</div>
+      <div class="logo">Atlas Real Estate - Admin</div>
       <ul>
-        <li><a href="/">Site</a></li>
-        <li><a href="#listings">Listings</a></li>
+        <li><a href="/">View Site</a></li>
+        <li><a href="#listings">Manage Listings</a></li>
+        <li><a href="#i18n">Translations</a></li>
       </ul>
     </nav>
   </header>
 
   <main>
-    <h1>Admin — i18n Editor</h1>
+    <h1>Admin Panel - Manage Listings</h1>
     <p>Use this page to preview and POST updated i18n JSON to <code>/api/i18n</code> (requires <code>x-admin-token</code> header).</p>
     <textarea id="i18n-editor" style="width:100%;height:360px;font-family:monospace"></textarea>
     <div style="margin-top:.5rem">
@@ -149,7 +150,8 @@
                   <label>Price text <input id="listing-priceText" type="text"></label>
                   <label>Location <input id="listing-location" type="text"></label>
                   <label>Rooms <input id="listing-rooms" type="number"></label>
-                  <label>Surface <input id="listing-surface" type="number"></label>
+                  <label>Bathrooms <input id="listing-bathrooms" type="number"></label>
+                  <label>Surface (m²) <input id="listing-surface" type="number"></label>
                   <label>Images (comma-separated URLs) <input id="listing-images" type="text" placeholder="https://... , https://..." /></label>
                   <label>Description <textarea id="listing-description" rows="4"></textarea></label>
                   <div style="margin-top:.5rem">

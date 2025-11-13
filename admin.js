@@ -56,6 +56,7 @@ function fillForm(obj){
   document.getElementById('listing-priceText').value = obj.priceText||'';
   document.getElementById('listing-location').value = obj.location||'';
   document.getElementById('listing-rooms').value = obj.rooms||'';
+  document.getElementById('listing-bathrooms').value = obj.bathrooms||'';
   document.getElementById('listing-surface').value = obj.surface||'';
   document.getElementById('listing-images').value = (obj.images||[]).join(', ');
   document.getElementById('listing-description').value = obj.description||'';
@@ -77,6 +78,7 @@ async function saveListing(){
     priceText: document.getElementById('listing-priceText').value,
     location: document.getElementById('listing-location').value,
     rooms: Number(document.getElementById('listing-rooms').value)||0,
+    bathrooms: Number(document.getElementById('listing-bathrooms').value)||0,
     surface: Number(document.getElementById('listing-surface').value)||0,
     images: document.getElementById('listing-images').value.split(',').map(s=>s.trim()).filter(Boolean),
     description: document.getElementById('listing-description').value
