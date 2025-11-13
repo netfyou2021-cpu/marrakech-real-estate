@@ -26,9 +26,13 @@ nav a{color:var(--muted);text-decoration:none}
 .view-toggle button.active{background:var(--accent);color:#fff}
 .property-container{display:grid;grid-template-columns:1fr 360px;gap:1rem}
 .property-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
-.property-card{background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.06);display:flex;flex-direction:column}
+.property-card{background:var(--card);border-radius:8px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,0.06);display:flex;flex-direction:column;position:relative}
 .property-card img{width:100%;height:160px;object-fit:cover}
 .property-card .content{padding:0.8rem}
+.favorite-btn{position:absolute;top:0.75rem;right:0.75rem;background:rgba(255,255,255,0.95);border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:#ccc;transition:all 0.2s;box-shadow:0 2px 8px rgba(0,0,0,0.1);z-index:10}
+.favorite-btn:hover{transform:scale(1.1);box-shadow:0 3px 12px rgba(0,0,0,0.15)}
+.favorite-btn.active{color:#ff4757}
+.favorites-dropdown{display:flex;align-items:center;gap:0.5rem}
 .property-card h3{margin:0 0 0.2rem 0}
 .property-card .meta{color:var(--muted);font-size:0.9rem;margin-bottom:0.6rem}
 .property-card .excerpt{font-size:0.95rem;color:#444}

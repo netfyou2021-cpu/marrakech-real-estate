@@ -1,5 +1,22 @@
 // Small frontend for listings — fetches from /api/listings and shows cards + modal
 let listings = [];
+let allListings = [];
+let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+
+function toggleFavorite(id) {
+  const idx = favorites.indexOf(id);
+  if (idx > -1) {
+    favorites.splice(idx, 1);
+  } else {
+    favorites.push(id);
+  }
+  localStorage.setItem('favorites', JSON.stringify(favorites));
+  renderListings();
+}
+
+function isFavorite(id) {
+  return favorites.includes(id);
+}
 
 async function fetchListingsFromApi(params = {}) {
   const qs = new URLSearchParams(params).toString();
@@ -86,7 +103,9 @@ function renderListings() {
   const grid = document.getElementById('property-grid');
   grid.className = currentView === 'grid' ? 'property-grid' : 'property-list';
   grid.innerHTML = '';
-  listings.forEach(l => {
+  const favoritesFilter = document.getElementById('favorites-filter').value;
+  const displayListings = favoritesFilter === 'favorites' ? listings.filter(l => isFavorite(l.id)) : listings;
+  displayListings.forEach(l => {
     const card = document.createElement('article');
     card.className = 'property-card' + (currentView==='list'? ' list':'');
     const roomsInfo = [];
@@ -94,6 +113,9 @@ function renderListings() {
     if (l.bathrooms) roomsInfo.push(`🚿 ${l.bathrooms}`);
     if (l.surface) roomsInfo.push(`📐 ${l.surface}m²`);
     card.innerHTML = `
+      <button class="favorite-btn ${isFavorite(l.id) ? 'active' : ''}" data-id="${l.id}" onclick="event.stopPropagation(); toggleFavorite(${l.id})">
+        ${isFavorite(l.id) ? '♥' : '♡'}
+      </button>
       <img src="${l.images && l.images[0] ? l.images[0] : 'https://via.placeholder.com/600x400?text=No+Image'}" alt="${l.title}">
       <div class="content">
         <h3>${l.title}</h3>
@@ -130,14 +152,12 @@ function renderListings() {
 async function applyAndLoad() {
   const search = document.getElementById('search-input').value || '';
   const type = document.getElementById('filter-type').value || 'all';
-  const action = document.getElementById('filter-action').value || 'all';
   const minPrice = document.getElementById('min-price').value || '';
   const minRooms = document.getElementById('min-rooms').value || '';
   const minSurface = document.getElementById('min-surface').value || '';
   const sort = document.getElementById('sort-by') ? document.getElementById('sort-by').value || 'created_desc' : 'created_desc';
   const params = {};
   if (type && type!=='all') params.type = type;
-  if (action && action!=='all') params.action = action;
   if (search) params.q = search;
   if (minPrice) params.minPrice = minPrice;
   if (minRooms) params.minRooms = minRooms;
@@ -162,13 +182,14 @@ function updateMapMarkers() {
 
 document.getElementById('search-btn').addEventListener('click', applyAndLoad);
 document.getElementById('filter-type').addEventListener('change', applyAndLoad);
-document.getElementById('filter-action').addEventListener('change', applyAndLoad);
+document.getElementById('favorites-filter').addEventListener('change', renderListings);
 document.getElementById('min-price').addEventListener('change', applyAndLoad);
 document.getElementById('min-rooms').addEventListener('change', applyAndLoad);
 document.getElementById('min-surface').addEventListener('change', applyAndLoad);
 if (document.getElementById('sort-by')) {
   document.getElementById('sort-by').addEventListener('change', applyAndLoad);
 }
+window.toggleFavorite = toggleFavorite;
 document.getElementById('language-select').addEventListener('change', (e) => {
   applyTranslationsFor(e.target.value);
 });
