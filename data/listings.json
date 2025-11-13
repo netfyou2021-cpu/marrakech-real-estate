@@ -1,42 +1,128 @@
 [
   {
     "id": 1,
-    "title": "Modern Apartment in Gueliz",
+    "title": "Exquisite Riad in the Heart of Medina",
+    "type": "apartment",
+    "action": "buy",
+    "price": 850000,
+    "priceText": "€850,000",
+    "location": "12 Derb Lalla Azzouna, Medina, Marrakech",
+    "rooms": 5,
+    "bathrooms": 6,
+    "surface": 320,
+    "description": "Stunning traditional riad in the historic Medina. Beautifully restored with authentic Moroccan craftsmanship, rooftop terrace, courtyard with fountain, and modern amenities.",
+    "images": [
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"
+    ],
+    "agent": {
+      "name": "Fatima A.",
+      "phone": "+212 600 123 456"
+    },
+    "created_at": 1763027640190
+  },
+  {
+    "id": 2,
+    "title": "Modern Villa in Palmeraie",
+    "type": "villa",
+    "action": "buy",
+    "price": 1200000,
+    "priceText": "€1,200,000",
+    "location": "Route de Bab Atlas, Palmeraie, Marrakech",
+    "rooms": 6,
+    "bathrooms": 7,
+    "surface": 750,
+    "description": "Contemporary luxury villa in prestigious Palmeraie. Features include infinity pool, landscaped gardens, home cinema, gym, and stunning Atlas mountain views.",
+    "images": [
+      "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800"
+    ],
+    "agent": {
+      "name": "Youssef K.",
+      "phone": "+212 661 234 567"
+    },
+    "created_at": 1763027640190
+  },
+  {
+    "id": 3,
+    "title": "Elegant Apartment in Gueliz",
     "type": "apartment",
     "action": "rent",
-    "price": 5000,
-    "priceText": "5000 MAD/month",
-    "location": "Gueliz",
-    "rooms": 2,
-    "surface": 80,
-    "description": "Bright 2-bedroom apartment in the heart of Gueliz — walking distance to cafes, secure entry, modern kitchen.",
+    "price": 8500,
+    "priceText": "8,500 MAD/month",
+    "location": "Avenue Mohammed V, Gueliz, Marrakech",
+    "rooms": 3,
+    "bathrooms": 2,
+    "surface": 145,
+    "description": "Modern 3-bedroom apartment in the heart of Gueliz. Walking distance to restaurants, shops, and cafes. Fully furnished with contemporary design.",
     "images": [
-      "images/apartment_gueliz.jpg"
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800"
     ],
     "agent": {
       "name": "Leila B.",
       "phone": "+212 600 111 222"
     },
-    "created_at": 1762974974581
+    "created_at": 1763027640190
   },
   {
-    "id": 2,
-    "title": "Luxury Villa in Palmeraie",
-    "type": "villa",
+    "id": 4,
+    "title": "Luxury Penthouse in Hivernage",
+    "type": "apartment",
     "action": "buy",
-    "price": 2500000,
-    "priceText": "2,500,000 MAD",
-    "location": "Palmeraie",
-    "rooms": 6,
-    "surface": 450,
-    "description": "Private villa with infinity pool, mature gardens and guest house.",
+    "price": 2800000,
+    "priceText": "2,800,000 MAD",
+    "location": "Hivernage, Marrakech",
+    "rooms": 4,
+    "bathrooms": 3,
+    "surface": 280,
+    "description": "Exclusive penthouse with panoramic city and Atlas views. Private rooftop terrace, premium finishes, and resort-style amenities.",
     "images": [
-      "images/villa_palmeraie_1.jpg",
-      "images/villa_palmeraie_2.jpg"
+      "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800"
     ],
     "agent": {
-      "name": "Youssef"
+      "name": "Karim M.",
+      "phone": "+212 662 345 678"
     },
-    "created_at": 1762974974581
+    "created_at": 1763027640190
+  },
+  {
+    "id": 5,
+    "title": "Charming Villa in Route de Fes",
+    "type": "villa",
+    "action": "rent",
+    "price": 25000,
+    "priceText": "25,000 MAD/month",
+    "location": "Route de Fes, Marrakech",
+    "rooms": 5,
+    "bathrooms": 4,
+    "surface": 450,
+    "description": "Beautiful traditional villa with modern comforts. Private pool, lush gardens, spacious living areas, and staff quarters.",
+    "images": [
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800"
+    ],
+    "agent": {
+      "name": "Amina S.",
+      "phone": "+212 670 987 654"
+    },
+    "created_at": 1763027640190
+  },
+  {
+    "id": 6,
+    "title": "Contemporary Townhouse in Targa",
+    "type": "villa",
+    "action": "buy",
+    "price": 1650000,
+    "priceText": "1,650,000 MAD",
+    "location": "Targa, Marrakech",
+    "rooms": 4,
+    "bathrooms": 3,
+    "surface": 320,
+    "description": "Modern townhouse in secure residential community. Open-plan living, private garden, garage, and close to international schools.",
+    "images": [
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800"
+    ],
+    "agent": {
+      "name": "Hassan R.",
+      "phone": "+212 655 432 109"
+    },
+    "created_at": 1763027640190
   }
 ]
