@@ -3,6 +3,20 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
+// Load .env file if it exists
+try {
+  const envPath = path.join(__dirname, '.env');
+  if (fs.existsSync(envPath)) {
+    const envContent = fs.readFileSync(envPath, 'utf8');
+    envContent.split('\n').forEach(line => {
+      const [key, ...valueParts] = line.split('=');
+      if (key && valueParts.length > 0) {
+        process.env[key.trim()] = valueParts.join('=').trim();
+      }
+    });
+  }
+} catch (e) { /* ignore */ }
+
 const PORT = process.env.PORT || 3000;
 const ROOT = __dirname;
 const ADMIN = process.env.ADMIN_TOKEN || 'dev-token';
