@@ -85,16 +85,18 @@
                     <option value="6">6+</option>
                 </select>
                 <select id="min-surface">
-                    <option value="">Min surface (m²)</option>
+                    <option value="">Surface (m²)</option>
+                    <option value="20">20+</option>
                     <option value="50">50+</option>
                     <option value="100">100+</option>
                     <option value="150">150+</option>
                     <option value="200">200+</option>
                     <option value="300">300+</option>
                     <option value="500">500+</option>
+                    <option value="1000">1000+</option>
                 </select>
             </div>
-            <div class="filter-group">
+            <div class="filter-group" style="display:none;">
                 <input type="number" id="max-surface" placeholder="Max surface" min="0" style="display:none;">
             </div>
             <button id="apply-filters" data-key="applyFilters">Apply Filters</button>
