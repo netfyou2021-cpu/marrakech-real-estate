@@ -45,8 +45,8 @@ if (!fs.existsSync(LISTINGS_FILE)) {
       title: 'Exquisite Riad in the Heart of Medina',
       type: 'apartment',
       action: 'buy',
-      price: 850000,
-      priceText: '€850,000',
+      price: 8500000,
+      priceText: '8,500,000 Dhrs',
       location: '12 Derb Lalla Azzouna, Medina, Marrakech',
       rooms: 5,
       bathrooms: 6,
@@ -61,8 +61,8 @@ if (!fs.existsSync(LISTINGS_FILE)) {
       title: 'Modern Villa in Palmeraie',
       type: 'villa',
       action: 'buy',
-      price: 1200000,
-      priceText: '€1,200,000',
+      price: 12000000,
+      priceText: '12,000,000 Dhrs',
       location: 'Route de Bab Atlas, Palmeraie, Marrakech',
       rooms: 6,
       bathrooms: 7,
@@ -78,7 +78,7 @@ if (!fs.existsSync(LISTINGS_FILE)) {
       type: 'apartment',
       action: 'rent',
       price: 8500,
-      priceText: '8,500 MAD/month',
+      priceText: '8,500 Dhrs/month',
       location: 'Avenue Mohammed V, Gueliz, Marrakech',
       rooms: 3,
       bathrooms: 2,
@@ -94,7 +94,7 @@ if (!fs.existsSync(LISTINGS_FILE)) {
       type: 'apartment',
       action: 'buy',
       price: 2800000,
-      priceText: '2,800,000 MAD',
+      priceText: '2,800,000 Dhrs',
       location: 'Hivernage, Marrakech',
       rooms: 4,
       bathrooms: 3,
@@ -110,7 +110,7 @@ if (!fs.existsSync(LISTINGS_FILE)) {
       type: 'villa',
       action: 'rent',
       price: 25000,
-      priceText: '25,000 MAD/month',
+      priceText: '25,000 Dhrs/month',
       location: 'Route de Fes, Marrakech',
       rooms: 5,
       bathrooms: 4,
@@ -126,7 +126,7 @@ if (!fs.existsSync(LISTINGS_FILE)) {
       type: 'villa',
       action: 'buy',
       price: 1650000,
-      priceText: '1,650,000 MAD',
+      priceText: '1,650,000 Dhrs',
       location: 'Targa, Marrakech',
       rooms: 4,
       bathrooms: 3,
@@ -171,6 +171,8 @@ const server = http.createServer((req, res) => {
     const search = q.get('q');
     const minPrice = q.get('minPrice');
     const maxPrice = q.get('maxPrice');
+    const minRooms = q.get('minRooms');
+    const minSurface = q.get('minSurface');
     const page = Math.max(1, Number(q.get('page') || 1));
     const perPage = Math.max(1, Math.min(100, Number(q.get('perPage') || 20)));
     const sort = q.get('sort'); // price_asc, price_desc, created_desc
@@ -179,6 +181,8 @@ const server = http.createServer((req, res) => {
     if (action && action !== 'all') items = items.filter(i => i.action === action);
     if (minPrice) items = items.filter(i => (i.price||0) >= Number(minPrice));
     if (maxPrice) items = items.filter(i => (i.price||0) <= Number(maxPrice));
+    if (minRooms) items = items.filter(i => (i.rooms||0) >= Number(minRooms));
+    if (minSurface) items = items.filter(i => (i.surface||0) >= Number(minSurface));
     if (search) items = items.filter(i => (i.title||'').toLowerCase().includes(search.toLowerCase()) || (i.location||'').toLowerCase().includes(search.toLowerCase()));
     if (sort === 'price_asc') items.sort((a,b)=> (a.price||0)-(b.price||0));
     if (sort === 'price_desc') items.sort((a,b)=> (b.price||0)-(a.price||0));

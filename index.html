@@ -39,30 +39,63 @@
         <h2 data-key="listingsTitle">Browse Properties</h2>
         <div class="filters">
             <div class="filter-group">
-                <select id="filter-type" data-key="filterType">
+                <select id="filter-type">
                     <option value="all">All Types</option>
                     <option value="apartment">Apartment</option>
                     <option value="villa">Villa</option>
+                    <option value="house">House</option>
+                    <option value="riad">Riad</option>
                     <option value="land">Land</option>
                     <option value="garage">Garage</option>
                 </select>
-                <select id="filter-action" data-key="filterAction">
+                <select id="filter-action">
                     <option value="all">Rent or Buy</option>
                     <option value="rent">Rent</option>
                     <option value="buy">Buy</option>
                 </select>
             </div>
             <div class="filter-group">
-                <input type="number" id="min-price" placeholder="Min price" min="0">
-                <input type="number" id="max-price" placeholder="Max price" min="0">
+                <select id="min-price">
+                    <option value="">Min price</option>
+                    <option value="5000">5,000 Dhrs+</option>
+                    <option value="10000">10,000 Dhrs+</option>
+                    <option value="20000">20,000 Dhrs+</option>
+                    <option value="500000">500,000 Dhrs+</option>
+                    <option value="1000000">1,000,000 Dhrs+</option>
+                    <option value="2000000">2,000,000 Dhrs+</option>
+                </select>
+                <select id="max-price">
+                    <option value="">Max price</option>
+                    <option value="10000">10,000 Dhrs</option>
+                    <option value="20000">20,000 Dhrs</option>
+                    <option value="50000">50,000 Dhrs</option>
+                    <option value="1000000">1,000,000 Dhrs</option>
+                    <option value="3000000">3,000,000 Dhrs</option>
+                    <option value="5000000">5,000,000 Dhrs</option>
+                </select>
             </div>
             <div class="filter-group">
-                <input type="number" id="min-rooms" placeholder="Min rooms" min="0">
-                <input type="number" id="max-rooms" placeholder="Max rooms" min="0">
+                <select id="min-rooms">
+                    <option value="">Min rooms</option>
+                    <option value="1">1+</option>
+                    <option value="2">2+</option>
+                    <option value="3">3+</option>
+                    <option value="4">4+</option>
+                    <option value="5">5+</option>
+                    <option value="6">6+</option>
+                </select>
+                <select id="min-surface">
+                    <option value="">Min surface (m²)</option>
+                    <option value="50">50+</option>
+                    <option value="100">100+</option>
+                    <option value="150">150+</option>
+                    <option value="200">200+</option>
+                    <option value="300">300+</option>
+                    <option value="500">500+</option>
+                </select>
             </div>
             <div class="filter-group">
-                <input type="number" id="min-surface" placeholder="Min surface" min="0">
-                <input type="number" id="max-surface" placeholder="Max surface" min="0">
+                <input type="number" id="max-surface" placeholder="Max surface" min="0" style="display:none;">
             </div>
             <button id="apply-filters" data-key="applyFilters">Apply Filters</button>
         </div>
@@ -82,7 +115,7 @@
     </section>
     
     <footer>
-        <p data-key="footer">© 2025 Marrakech Realty. All rights reserved.</p>
+        <p data-key="footer">© 2025 Marrakech.Homes. All rights reserved.</p>
     </footer>
 
     <!-- Detail modal -->

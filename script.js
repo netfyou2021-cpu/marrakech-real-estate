@@ -23,9 +23,9 @@ async function fetchListingsFromApi(params = {}) {
 }
 
 const translations = {
-  en: { home: 'Home', listings: 'Listings', contact: 'Contact', heroTitle: 'Find Your Dream Property in Marrakech', heroSubtitle: 'Rent or buy apartments, villas, lands, and garages with ease.', searchPlaceholder: 'Search by location or keyword (e.g., Gueliz)', searchBtn: 'Search', listingsTitle: 'Browse Properties', filterType: 'All Types', filterAction: 'Rent or Buy', applyFilters: 'Search', mapNote: 'Map shows general Marrakech locations. Click markers for details.', footer: '© 2025 Marrakech Realty. All rights reserved.' },
-  fr: { home: 'Accueil', listings: 'Annonces', contact: 'Contact', heroTitle: 'Trouvez votre propriété de rêve à Marrakech', heroSubtitle: 'Louer ou acheter des appartements, villas, terrains et garages facilement.', searchPlaceholder: 'Rechercher par lieu ou mot-clé (ex: Gueliz)', searchBtn: 'Rechercher', listingsTitle: 'Parcourir les propriétés', filterType: 'Tous les types', filterAction: 'Louer ou Acheter', applyFilters: 'Rechercher', mapNote: 'La carte montre les emplacements généraux de Marrakech. Cliquez sur les marqueurs pour plus de détails.', footer: '© 2025 Marrakech Realty. Tous droits réservés.' },
-  ar: { home: 'الرئيسية', listings: 'القوائم', contact: 'اتصل بنا', heroTitle: 'اعثر على عقار أحلامك في مراكش', heroSubtitle: 'استأجر أو اشترِ شققًا، فيلا، أراضي، وجراجات بسهولة.', searchPlaceholder: 'البحث حسب الموقع أو الكلمة الرئيسية (مثل: كويليز)', searchBtn: 'بحث', listingsTitle: 'تصفح العقارات', filterType: 'جميع الأنواع', filterAction: 'استأجر أو اشترِ', applyFilters: 'بحث', mapNote: 'الخريطة تظهر مواقع مراكش العامة. انقر على العلامات للتفاصيل.', footer: '© 2025 مراكش ريالتي. جميع الحقوق محفوظة.' }
+  en: { home: 'Home', listings: 'Listings', contact: 'Contact', heroTitle: 'Find Your Dream Property in Marrakech', heroSubtitle: 'Rent or buy apartments, villas, lands, and garages with ease.', searchPlaceholder: 'Search by location or keyword (e.g., Gueliz)', searchBtn: 'Search', listingsTitle: 'Browse Properties', filterType: 'All Types', filterAction: 'Rent or Buy', applyFilters: 'Search', mapNote: 'Map shows general Marrakech locations. Click markers for details.', footer: '© 2025 Marrakech.Homes. All rights reserved.' },
+  fr: { home: 'Accueil', listings: 'Annonces', contact: 'Contact', heroTitle: 'Trouvez votre propriété de rêve à Marrakech', heroSubtitle: 'Louer ou acheter des appartements, villas, terrains et garages facilement.', searchPlaceholder: 'Rechercher par lieu ou mot-clé (ex: Gueliz)', searchBtn: 'Rechercher', listingsTitle: 'Parcourir les propriétés', filterType: 'Tous les types', filterAction: 'Louer ou Acheter', applyFilters: 'Rechercher', mapNote: 'La carte montre les emplacements généraux de Marrakech. Cliquez sur les marqueurs pour plus de détails.', footer: '© 2025 Marrakech.Homes. Tous droits réservés.' },
+  ar: { home: 'الرئيسية', listings: 'القوائم', contact: 'اتصل بنا', heroTitle: 'اعثر على عقار أحلامك في مراكش', heroSubtitle: 'استأجر أو اشترِ شققًا، فيلا، أراضي، وجراجات بسهولة.', searchPlaceholder: 'البحث حسب الموقع أو الكلمة الرئيسية (مثل: كويليز)', searchBtn: 'بحث', listingsTitle: 'تصفح العقارات', filterType: 'جميع الأنواع', filterAction: 'استأجر أو اشترِ', applyFilters: 'بحث', mapNote: 'الخريطة تظهر مواقع مراكش العامة. انقر على العلامات للتفاصيل.', footer: '© 2025 Marrakech.Homes. جميع الحقوق محفوظة.' }
 };
 
 async function loadI18n() {
@@ -62,7 +62,10 @@ function toggleView() {
 }
 
 function formatPrice(l) {
-  return l.priceText || (l.price ? l.price.toLocaleString() + ' MAD' : '—');
+  if (l.priceText) return l.priceText.replace(/MAD/g, 'Dhrs').replace(/€/g, 'Dhrs');
+  if (!l.price) return '—';
+  if (l.action === 'rent') return `${l.price.toLocaleString()} Dhrs/month`;
+  return `${l.price.toLocaleString()} Dhrs`;
 }
 
 function openModal(html) {
@@ -130,14 +133,31 @@ async function applyAndLoad() {
   const action = document.getElementById('filter-action').value || 'all';
   const minPrice = document.getElementById('min-price').value || '';
   const maxPrice = document.getElementById('max-price').value || '';
+  const minRooms = document.getElementById('min-rooms').value || '';
+  const minSurface = document.getElementById('min-surface').value || '';
   const params = {};
   if (type && type!=='all') params.type = type;
   if (action && action!=='all') params.action = action;
   if (search) params.q = search;
   if (minPrice) params.minPrice = minPrice;
   if (maxPrice) params.maxPrice = maxPrice;
+  if (minRooms) params.minRooms = minRooms;
+  if (minSurface) params.minSurface = minSurface;
   await fetchListingsFromApi(params);
   renderListings();
+  updateMapMarkers();
+}
+
+function updateMapMarkers() {
+  // Update map to show filtered listings
+  // Note: For production, integrate Google Maps API to add dynamic markers
+  // Marrakech neighborhood coordinates:
+  // Gueliz: 31.6347, -8.0089 | Medina: 31.6295, -7.9811
+  // Palmeraie: 31.6692, -8.0428 | Hivernage: 31.6219, -8.0182
+  const mapNote = document.querySelector('.map p');
+  if (mapNote && listings.length > 0) {
+    mapNote.textContent = `Showing ${listings.length} ${listings.length === 1 ? 'property' : 'properties'} on map`;
+  }
 }
 
 document.getElementById('apply-filters').addEventListener('click', applyAndLoad);
