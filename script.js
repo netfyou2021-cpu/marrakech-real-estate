@@ -2,6 +2,110 @@
 let listings = [];
 let allListings = [];
 let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+let map = null;
+let markersLayer = null;
+
+// Initialize Leaflet map
+function initMap() {
+  if (map) return;
+  map = L.map('map-container').setView([31.6295, -7.9811], 12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    maxZoom: 18
+  }).addTo(map);
+  markersLayer = L.layerGroup().addTo(map);
+}
+
+// Location coordinates for Marrakech neighborhoods
+const locationCoords = {
+  'Gueliz': [31.6347, -8.0089],
+  'Hivernage': [31.6219, -8.0182],
+  'Medina': [31.6295, -7.9811],
+  'Palmeraie': [31.6692, -8.0428],
+  'Kasbah': [31.6207, -7.9894],
+  'Targa': [31.6580, -8.0350],
+  'Route de Fes': [31.6500, -7.9500],
+  'Agdal': [31.6180, -7.9970],
+  'Ourika': [31.4000, -7.6700],
+  'Amizmiz': [31.2167, -8.2500],
+  'Lalla Takerkoust': [31.3333, -8.1000]
+};
+
+function getCoordinates(location) {
+  // Try exact match first
+  if (locationCoords[location]) return locationCoords[location];
+  // Try partial match
+  for (let key in locationCoords) {
+    if (location.includes(key) || key.includes(location)) {
+      return locationCoords[key];
+    }
+  }
+  // Default to Marrakech center with small random offset
+  return [31.6295 + (Math.random() - 0.5) * 0.05, -7.9811 + (Math.random() - 0.5) * 0.05];
+}
+
+function updateMapMarkers() {
+  if (!map || !markersLayer) return;
+  markersLayer.clearLayers();
+  
+  const displayListings = document.getElementById('favorites-filter').value === 'favorites' 
+    ? listings.filter(l => isFavorite(l.id)) 
+    : listings;
+  
+  displayListings.forEach(listing => {
+    const coords = getCoordinates(listing.location || 'Medina');
+    const icon = L.divIcon({
+      className: 'custom-marker',
+      html: `<div style="background:#007bff;width:30px;height:30px;border-radius:50%;border:3px solid white;box-shadow:0 2px 8px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:12px;">${formatPrice(listing).split(' ')[0]}</div>`,
+      iconSize: [30, 30],
+      iconAnchor: [15, 15]
+    });
+    
+    const marker = L.marker(coords, { icon }).addTo(markersLayer);
+    marker.bindPopup(`
+      <div style="min-width:200px;">
+        <img src="${listing.images && listing.images[0] ? listing.images[0] : 'https://via.placeholder.com/200x120'}" style="width:100%;height:120px;object-fit:cover;border-radius:4px;margin-bottom:8px;" />
+        <h4 style="margin:0 0 8px 0;font-size:14px;">${listing.title}</h4>
+        <p style="margin:4px 0;color:#666;font-size:12px;">📍 ${listing.location || ''}</p>
+        <p style="margin:4px 0;font-weight:bold;color:#c14b1a;font-size:14px;">${formatPrice(listing)}</p>
+        <p style="margin:4px 0;color:#666;font-size:12px;">${listing.rooms ? '🛏️ '+listing.rooms : ''} ${listing.bathrooms ? '🚿 '+listing.bathrooms : ''} ${listing.surface ? '📐 '+listing.surface+'m²' : ''}</p>
+        <button onclick="showListingDetails(${listing.id})" style="margin-top:8px;padding:6px 12px;background:#c14b1a;color:white;border:none;border-radius:4px;cursor:pointer;width:100%;">View Details</button>
+      </div>
+    `);
+  });
+  
+  // Update map note
+  const note = document.getElementById('map-note');
+  if (note) {
+    note.textContent = `Showing ${displayListings.length} ${displayListings.length === 1 ? 'property' : 'properties'} on map`;
+  }
+  
+  // Fit bounds if there are markers
+  if (displayListings.length > 0) {
+    const bounds = displayListings.map(l => getCoordinates(l.location || 'Medina'));
+    if (bounds.length === 1) {
+      map.setView(bounds[0], 14);
+    } else if (bounds.length > 1) {
+      map.fitBounds(bounds, { padding: [50, 50] });
+    }
+  }
+}
+
+window.showListingDetails = async function(id) {
+  try {
+    const resp = await fetch(`/api/listings/${id}`);
+    if (resp.ok) {
+      const obj = await resp.json();
+      const detailRooms = [];
+      if (obj.rooms) detailRooms.push(`🛏️ ${obj.rooms} rooms`);
+      if (obj.bathrooms) detailRooms.push(`🚿 ${obj.bathrooms} bathrooms`);
+      if (obj.surface) detailRooms.push(`📐 ${obj.surface}m²`);
+      openModal(`<h2>${obj.title}</h2><p class="modal-meta">📍 ${obj.location}</p><p class="modal-price">${formatPrice(obj)}</p><p class="modal-meta">${detailRooms.join(' · ')}</p><img src="${obj.images && obj.images[0] ? obj.images[0] : 'https://via.placeholder.com/800x400?text=No+Image'}" style="width:100%;height:auto;margin:0.5rem 0;border-radius:8px;"/><p style="margin:1rem 0">${obj.description || ''}</p>${obj.agent ? `<div style="background:#f5f5f5;padding:1rem;border-radius:6px;margin-top:1rem"><strong>Contact Agent:</strong><br/>${obj.agent.name || ''} ${obj.agent.phone ? '· ' + obj.agent.phone : ''}</div>` : ''}`);
+    }
+  } catch (e) {
+    console.error('Error fetching listing:', e);
+  }
+};
 
 function toggleFavorite(id) {
   const idx = favorites.indexOf(id);
@@ -170,22 +274,13 @@ async function applyAndLoad() {
   updateMapMarkers();
 }
 
-function updateMapMarkers() {
-  // Update map to show filtered listings
-  // Note: For production, integrate Google Maps API to add dynamic markers
-  // Marrakech neighborhood coordinates:
-  // Gueliz: 31.6347, -8.0089 | Medina: 31.6295, -7.9811
-  // Palmeraie: 31.6692, -8.0428 | Hivernage: 31.6219, -8.0182
-  const mapNote = document.querySelector('.map p');
-  if (mapNote && listings.length > 0) {
-    mapNote.textContent = `Showing ${listings.length} ${listings.length === 1 ? 'property' : 'properties'} on map`;
-  }
-}
-
 document.getElementById('search-input').addEventListener('input', applyAndLoad);
 document.getElementById('region-filter').addEventListener('change', applyAndLoad);
 document.getElementById('filter-type').addEventListener('change', applyAndLoad);
-document.getElementById('favorites-filter').addEventListener('change', renderListings);
+document.getElementById('favorites-filter').addEventListener('change', () => {
+  renderListings();
+  updateMapMarkers();
+});
 document.getElementById('min-price').addEventListener('change', applyAndLoad);
 document.getElementById('min-rooms').addEventListener('change', applyAndLoad);
 document.getElementById('min-surface').addEventListener('change', applyAndLoad);
@@ -202,4 +297,6 @@ document.getElementById('language-select').addEventListener('change', (e) => {
   applyTranslationsFor(document.getElementById('language-select').value || 'en');
   await fetchListingsFromApi();
   renderListings();
+  initMap();
+  updateMapMarkers();
 })();

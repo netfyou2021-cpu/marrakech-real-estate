@@ -42,7 +42,13 @@ nav a{color:var(--muted);text-decoration:none}
 .property-card .actions{margin-top:0.6rem}
 .property-card .actions button{background:var(--accent-2);color:#fff;border:none;padding:0.5rem 0.8rem;border-radius:6px;cursor:pointer}
 .map{background:#fff;padding:0.5rem;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.04)}
-footer{padding:1rem;text-align:center;color:#6b4a32}
+footer{background:#2c2c2c;color:#ccc;padding:2rem 1rem;text-align:center}
+.footer-content{max-width:var(--max-width);margin:0 auto}
+.footer-tagline{font-size:1.1rem;color:#e8e8e8;margin:0 0 1.5rem 0;font-weight:300}
+.social-icons{display:flex;gap:1.5rem;justify-content:center;margin-bottom:1.5rem}
+.social-icons a{color:#ccc;transition:color 0.3s;display:flex;align-items:center;justify-content:center}
+.social-icons a:hover{color:#fff}
+.footer-copyright{font-size:0.9rem;color:#999;margin:0}
 
 /* modal */
 .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);opacity:0;pointer-events:none;transition:opacity 200ms}
