@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Atlas Real Estate — Admin Panel</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">Atlas Real Estate - Admin</div>
+      <ul>
+        <li><a href="/">View Site</a></li>
+        <li><a href="#listings">Manage Listings</a></li>
+        <li><a href="#i18n">Translations</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Admin Panel - Manage Listings</h1>
+    <p>Use this page to preview and POST updated i18n JSON to <code>/api/i18n</code> (requires <code>x-admin-token</code> header).</p>
+    <textarea id="i18n-editor" style="width:100%;height:360px;font-family:monospace"></textarea>
+    <div style="margin-top:.5rem">
+      <button id="load">Load</button>
+      <button id="save">Save (POST)</button>
+      <button id="reset">Reset</button>
+    </div>
+    <pre id="status" style="margin-top:.5rem;color:#333"></pre>
+  </main>
+
+  <script>
+    async function load(){
+      const res = await fetch('/api/i18n');
+      const j = await res.json();
+      document.getElementById('i18n-editor').value = JSON.stringify(j,null,2);
+      document.getElementById('status').textContent = 'Loaded';
+    }
+    document.getElementById('load').addEventListener('click', load);
+    document.getElementById('save').addEventListener('click', async ()=>{
+      try{
+        const payload = JSON.parse(document.getElementById('i18n-editor').value);
+        const res = await fetch('/api/i18n',{method:'POST',headers:{'Content-Type':'application/json','x-admin-token':'dev-token'},body:JSON.stringify(payload)});
+        const data = await res.json();
+        document.getElementById('status').textContent = 'Saved: ' + (data && data.ui ? 'OK' : JSON.stringify(data));
+      }catch(e){ document.getElementById('status').textContent = 'Error: ' + e.message }
+    });
+    document.getElementById('reset').addEventListener('click', ()=>{ document.getElementById('i18n-editor').value = ''; document.getElementById('status').textContent=''; });
+    // auto-load
+    load().catch(()=>{})
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Real Estate at Marrakech</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">Real Estate at Marrakech</div>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#listings">Listings</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="home" class="hero">
+    <h1>Find Your Dream Property in Marrakech</h1>
+    <p>Rent or buy apartments, villas, lands, and garages.</p>
+  </section>
+
+  <section id="filters-section">
+    <div class="filters-container">
+      <input type="text" id="search-input" placeholder="Search by location or keyword (e.g., Gueliz)" />
+
+      <select id="filter-type">
+        <option value="all">All Types</option>
+        <option value="apartment">Apartment</option>
+        <option value="villa">Villa</option>
+        <option value="land">Land</option>
+        <option value="garage">Garage</option>
+      </select>
+
+      <select id="filter-action">
+        <option value="all">Rent or Buy</option>
+        <option value="rent">Rent</option>
+        <option value="buy">Buy</option>
+      </select>
+
+      <select id="filter-price">
+        <option value="all">Price (MAD)</option>
+        <option value="0-10000">0 - 10,000</option>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <title>Marrakech — Admin</title>
+          <link rel="stylesheet" href="styles.css" />
+          <style>
+            main{max-width:1100px;margin:1.2rem auto;padding:1rem}
+            .admin-sections{display:grid;grid-template-columns:1fr 380px;gap:1rem}
+            .panel{background:#fff;padding:1rem;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.04)}
+            .listing-row{display:flex;gap:0.6rem;align-items:center;border-bottom:1px solid #f0f0f0;padding:0.6rem 0}
+            .listing-row img{width:80px;height:56px;object-fit:cover;border-radius:6px}
+            .listing-actions button{margin-left:0.4rem}
+            label{display:block;font-size:0.9rem;margin-top:0.5rem}
+            input[type="text"], input[type="number"], textarea{width:100%;padding:0.5rem;border-radius:6px;border:1px solid #eee}
+          </style>
+        </head>
+        <body>
+          <header>
+            <nav>
+              <div class="logo">Marrakech Admin</div>
+              <ul>
+                <li><a href="/">Site</a></li>
+              </ul>
+            </nav>
+          </header>
+
+          <main>
+            <h1>Admin Console</h1>
+            <p>Manage listings and translations. Admin requests require the <code>x-admin-token</code> header (default: <code>dev-token</code>).</p>
+
+            <div class="admin-sections">
+              <section class="panel">
+                <h2>Listings</h2>
+                <div id="listings-root"></div>
+                <button id="reload-listings">Reload</button>
+              </section>
+
+              <aside class="panel">
+                <h3>Create / Edit Listing</h3>
+                <form id="listing-form">
+                  <input type="hidden" id="listing-id">
+                  <label>Title <input id="listing-title" type="text"></label>
+                  <label>Type <input id="listing-type" type="text" placeholder="apartment / villa / land / garage"></label>
+                  <label>Action <input id="listing-action" type="text" placeholder="rent / buy"></label>
+                  <label>Price <input id="listing-price" type="number"></label>
+                  <label>Price text <input id="listing-priceText" type="text"></label>
+                  <label>Location <input id="listing-location" type="text"></label>
+                  <label>Rooms <input id="listing-rooms" type="number"></label>
+                  <label>Bathrooms <input id="listing-bathrooms" type="number"></label>
+                  <label>Surface (m²) <input id="listing-surface" type="number"></label>
+                  <label>Images (comma-separated URLs) <input id="listing-images" type="text" placeholder="https://... , https://..." /></label>
+                  <label>Description <textarea id="listing-description" rows="4"></textarea></label>
+                  <div style="margin-top:.5rem">
+                    <button id="save-listing" type="button">Save</button>
+                    <button id="delete-listing" type="button">Delete</button>
+                    <button id="clear-form" type="button">Clear</button>
+                  </div>
+                  <div id="listing-status" style="margin-top:.5rem;color:#333"></div>
+                </form>
+              </aside>
+            </div>
+
+            <section class="panel" style="margin-top:1rem">
+              <h2>i18n Editor</h2>
+              <textarea id="i18n-editor" style="width:100%;height:260px;font-family:monospace"></textarea>
+              <div style="margin-top:.5rem">
+                <input id="admin-token" placeholder="admin token (default: dev-token)" />
+                <button id="load-i18n">Load</button>
+                <button id="save-i18n">Save (POST)</button>
+              </div>
+              <pre id="i18n-status" style="margin-top:.5rem;color:#333"></pre>
+            </section>
+          </main>
+
+          <script src="admin.js"></script>
+          </body>
+          </html>
