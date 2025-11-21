@@ -155,7 +155,7 @@ function updateMapMarkers() {
     mapCount.textContent = listings.length;
   }
   
-  // Location coordinates for Marrakech neighborhoods:
+  // Location coordinates for Marrakech neighborhoods with exact coordinates
   const locationCoords = {
     'Gueliz': {lat: 31.6347, lng: -8.0089},
     'Medina': {lat: 31.6295, lng: -7.9811},
@@ -173,28 +173,44 @@ function updateMapMarkers() {
     'Amerchich': {lat: 31.6537, lng: -7.9669}
   };
   
-  // Build markers URL for Google Maps
+  // Build Google Maps URL with markers for each property location
   if (listings.length > 0) {
-    let markers = '';
+    const mapIframe = document.getElementById('map-iframe');
     const uniqueLocations = [...new Set(listings.map(l => l.location).filter(Boolean))];
     
-    uniqueLocations.forEach((loc, idx) => {
-      const coords = locationCoords[loc];
-      if (coords) {
-        const count = listings.filter(l => l.location === loc).length;
-        markers += `&markers=color:red%7Clabel:${count}%7C${coords.lat},${coords.lng}`;
-      }
-    });
+    // Create markers parameter string
+    let markersParam = '';
+    let centerLat = 31.6295;
+    let centerLng = -7.9811;
     
-    // Update map iframe with markers
+    if (uniqueLocations.length > 0) {
+      uniqueLocations.forEach((loc) => {
+        const coords = locationCoords[loc];
+        if (coords) {
+          const count = listings.filter(l => l.location === loc).length;
+          markersParam += `&markers=color:red%7Clabel:${count}%7C${coords.lat},${coords.lng}`;
+        }
+      });
+      
+      // Center map on first location if only one
+      if (uniqueLocations.length === 1 && locationCoords[uniqueLocations[0]]) {
+        centerLat = locationCoords[uniqueLocations[0]].lat;
+        centerLng = locationCoords[uniqueLocations[0]].lng;
+      }
+    }
+    
+    // Update map with markers showing property locations
+    if (mapIframe && markersParam) {
+      const zoom = uniqueLocations.length === 1 ? 14 : 12;
+      const newMapUrl = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d13596!2d${centerLng}!3d${centerLat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f${zoom}.1!5e0!3m2!1sen!2sma!4v1234567890${markersParam}`;
+      mapIframe.src = newMapUrl;
+      console.log(`Map updated: showing ${listings.length} properties in ${uniqueLocations.length} locations`);
+    }
+  } else {
+    // Reset to default Marrakech view when no properties
     const mapIframe = document.getElementById('map-iframe');
-    if (mapIframe && markers) {
-      const baseUrl = 'https://www.google.com/maps/embed/v1/view';
-      const center = uniqueLocations.length === 1 && locationCoords[uniqueLocations[0]] 
-        ? `${locationCoords[uniqueLocations[0]].lat},${locationCoords[uniqueLocations[0]].lng}`
-        : '31.6295,-7.9811';
-      // For production, use Google Maps with API key to show dynamic markers
-      console.log(`Showing ${listings.length} properties in ${uniqueLocations.length} locations`);
+    if (mapIframe) {
+      mapIframe.src = 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3399.1234!2d-8.0089!3d31.6295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdafef3d!2zTW9yb2NjbywgTW9yb2Njbw!5e0!3m2!1sen!2sus!4v1234567890';
     }
   }
 }
