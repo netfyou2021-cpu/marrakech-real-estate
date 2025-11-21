@@ -129,7 +129,6 @@ function renderListings() {
 
 async function applyAndLoad() {
   const search = document.getElementById('search-input').value || '';
-  const location = document.getElementById('filter-location').value || 'all';
   const type = document.getElementById('filter-type').value || 'all';
   const action = document.getElementById('filter-action').value || 'all';
   const minPrice = document.getElementById('min-price').value || '';
@@ -137,7 +136,6 @@ async function applyAndLoad() {
   const minSurface = document.getElementById('min-surface').value || '';
   const sort = document.getElementById('sort-by') ? document.getElementById('sort-by').value || 'created_desc' : 'created_desc';
   const params = {};
-  if (location && location!=='all') params.location = location;
   if (type && type!=='all') params.type = type;
   if (action && action!=='all') params.action = action;
   if (search) params.q = search;
@@ -157,7 +155,6 @@ function updateMapMarkers() {
     mapCount.textContent = listings.length;
   }
   
-  // For dynamic markers, you can integrate Google Maps JavaScript API
   // Location coordinates for Marrakech neighborhoods:
   const locationCoords = {
     'Gueliz': {lat: 31.6347, lng: -8.0089},
@@ -165,19 +162,45 @@ function updateMapMarkers() {
     'Palmeraie': {lat: 31.6692, lng: -8.0428},
     'Hivernage': {lat: 31.6219, lng: -8.0182},
     'Agdal': {lat: 31.6156, lng: -8.0089},
-    'Marrakech Centre': {lat: 31.6295, lng: -7.9811}
+    'Marrakech Centre': {lat: 31.6295, lng: -7.9811},
+    'Route de Fes': {lat: 31.6695, lng: -7.9669},
+    'Route de Casablanca': {lat: 31.6537, lng: -8.0621},
+    'Route de Ouarzazate': {lat: 31.5895, lng: -7.9811},
+    'Route de l\'Ourika': {lat: 31.5736, lng: -7.8969},
+    'Targa': {lat: 31.6695, lng: -8.0428},
+    'Massar': {lat: 31.5895, lng: -8.0089},
+    'Sidi Ghanem': {lat: 31.6863, lng: -8.0621},
+    'Amerchich': {lat: 31.6537, lng: -7.9669}
   };
   
-  // If you have Google Maps API key, you can dynamically add markers here
-  // This will show exact locations of filtered properties
-  if (listings.length > 0 && listings[0].location) {
-    // Future enhancement: Update iframe src or use Google Maps JS API
-    console.log(`Map showing ${listings.length} properties`);
+  // Build markers URL for Google Maps
+  if (listings.length > 0) {
+    let markers = '';
+    const uniqueLocations = [...new Set(listings.map(l => l.location).filter(Boolean))];
+    
+    uniqueLocations.forEach((loc, idx) => {
+      const coords = locationCoords[loc];
+      if (coords) {
+        const count = listings.filter(l => l.location === loc).length;
+        markers += `&markers=color:red%7Clabel:${count}%7C${coords.lat},${coords.lng}`;
+      }
+    });
+    
+    // Update map iframe with markers
+    const mapIframe = document.getElementById('map-iframe');
+    if (mapIframe && markers) {
+      const baseUrl = 'https://www.google.com/maps/embed/v1/view';
+      const center = uniqueLocations.length === 1 && locationCoords[uniqueLocations[0]] 
+        ? `${locationCoords[uniqueLocations[0]].lat},${locationCoords[uniqueLocations[0]].lng}`
+        : '31.6295,-7.9811';
+      // For production, use Google Maps with API key to show dynamic markers
+      console.log(`Showing ${listings.length} properties in ${uniqueLocations.length} locations`);
+    }
   }
 }
 
-document.getElementById('search-input').addEventListener('input', applyAndLoad);
-document.getElementById('filter-location').addEventListener('change', applyAndLoad);
+document.getElementById('search-btn').addEventListener('click', applyAndLoad);
+document.getElementById('search-input').addEventListener('keypress', (e)=>{ if(e.key==='Enter') applyAndLoad(); });
 document.getElementById('filter-type').addEventListener('change', applyAndLoad);
 document.getElementById('filter-action').addEventListener('change', applyAndLoad);
 document.getElementById('min-price').addEventListener('change', applyAndLoad);

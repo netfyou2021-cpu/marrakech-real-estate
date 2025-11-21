@@ -34,24 +34,24 @@
     <section id="listings" class="container">
         <h2 data-key="listingsTitle">Browse Properties</h2>
         <div class="search-bar-section">
-            <input type="text" id="search-input" class="search-bar-input" placeholder="Search by keyword (e.g., Gueliz)" data-key="searchPlaceholder">
-            <select id="filter-location" class="search-bar-dropdown">
-                <option value="all">All Locations</option>
-                <option value="Gueliz">Gueliz</option>
-                <option value="Medina">Medina</option>
-                <option value="Hivernage">Hivernage</option>
-                <option value="Palmeraie">Palmeraie</option>
-                <option value="Agdal">Agdal</option>
-                <option value="Marrakech Centre">Marrakech Centre</option>
-                <option value="Route de Fes">Route de Fes</option>
-                <option value="Route de Casablanca">Route de Casablanca</option>
-                <option value="Route de Ouarzazate">Route de Ouarzazate</option>
-                <option value="Route de l'Ourika">Route de l'Ourika</option>
-                <option value="Targa">Targa</option>
-                <option value="Massar">Massar</option>
-                <option value="Sidi Ghanem">Sidi Ghanem</option>
-                <option value="Amerchich">Amerchich</option>
-            </select>
+            <input type="text" id="search-input" class="search-bar-input" placeholder="Search by location or keyword (e.g., Gueliz, Villa, Apartment)" list="locations-list" data-key="searchPlaceholder">
+            <datalist id="locations-list">
+                <option value="Gueliz">
+                <option value="Medina">
+                <option value="Hivernage">
+                <option value="Palmeraie">
+                <option value="Agdal">
+                <option value="Marrakech Centre">
+                <option value="Route de Fes">
+                <option value="Route de Casablanca">
+                <option value="Route de Ouarzazate">
+                <option value="Route de l'Ourika">
+                <option value="Targa">
+                <option value="Massar">
+                <option value="Sidi Ghanem">
+                <option value="Amerchich">
+            </datalist>
+            <button id="search-btn" class="search-btn">Search</button>
         </div>
         <div class="filters">
             <select id="filter-type" class="filter-dropdown">
