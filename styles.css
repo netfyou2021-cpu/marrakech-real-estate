@@ -7,10 +7,10 @@
 body{margin:0;background:linear-gradient(180deg,#fffaf0 0%, #fff 100%);color:var(--muted);font-family:var(--font-family, Roboto),sans-serif}
 header{background:rgba(193,75,26,0.06);padding:0.6rem 1rem;border-bottom:1px solid rgba(0,0,0,0.04)}
 nav{max-width:var(--max-width);margin:0 auto;display:flex;align-items:center;gap:1rem}
-.logo{font-weight:700;color:var(--accent);font-size:1.2rem}
+.logo{font-weight:700;color:var(--accent);font-size:1.4rem;letter-spacing:0.5px}
 nav ul{list-style:none;margin:0;padding:0;display:flex;gap:1rem;flex:1}
 nav a{color:var(--muted);text-decoration:none}
-.hero{padding:5rem 1rem;min-height:55vh;background-size:cover;background-position:center;color:#fff;position:relative;overflow:hidden;animation:slideshow 30s ease-in-out infinite}
+.hero{padding:4rem 1rem;min-height:50vh;background-size:cover;background-position:center;color:#fff;position:relative;overflow:hidden;animation:slideshow 30s ease-in-out infinite}
 @keyframes slideshow{0%,33%{background-image:url('hero-marrakech.jpg');background-size:110%}34%,66%{background-image:url('hero-2.jpg');background-size:110%}67%,100%{background-image:url('hero-3.jpg');background-size:110%}}
 .hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,0.4) 0%,rgba(0,0,0,0.6) 100%);z-index:1}
 .hero>*{position:relative;z-index:2}

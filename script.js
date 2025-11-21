@@ -178,15 +178,19 @@ function updateMapMarkers() {
     const mapIframe = document.getElementById('map-iframe');
     const uniqueLocations = [...new Set(listings.map(l => l.location).filter(Boolean))];
     
-    // Create markers parameter string and calculate center
+    // Create markers and calculate center
     let centerLat = 0;
     let centerLng = 0;
     let validCount = 0;
+    let markersString = '';
     
     if (uniqueLocations.length > 0) {
       uniqueLocations.forEach((loc) => {
         const coords = locationCoords[loc];
         if (coords) {
+          const count = listings.filter(l => l.location === loc).length;
+          // Build marker string for this location
+          markersString += `&markers=color:red%7Clabel:${count}%7C${coords.lat},${coords.lng}`;
           centerLat += coords.lat;
           centerLng += coords.lng;
           validCount++;
@@ -198,27 +202,19 @@ function updateMapMarkers() {
         centerLat = centerLat / validCount;
         centerLng = centerLng / validCount;
         
-        // Update map iframe with new center and zoom
-        const zoom = uniqueLocations.length === 1 ? 15 : (uniqueLocations.length <= 3 ? 13 : 12);
-        const newSrc = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d13196!2d${centerLng}!3d${centerLat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f${zoom}.1!5e0!3m2!1sen!2sus!4v${Date.now()}`;
+        // Determine zoom level based on number of locations
+        const zoom = uniqueLocations.length === 1 ? 14 : (uniqueLocations.length <= 3 ? 12 : 11);
+        
+        // Build map URL with centered view and timestamp to force reload
+        const newSrc = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d${Math.round(13000/Math.pow(2, zoom-10))}!2d${centerLng}!3d${centerLat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f${zoom}.1!5e0!3m2!1sen!2sma!4v${Date.now()}`;
         
         if (mapIframe && mapIframe.src !== newSrc) {
           mapIframe.src = newSrc;
-          console.log(`Map recentered to ${uniqueLocations.join(', ')} - showing ${listings.length} properties`);
+          console.log(`✅ Map updated: ${uniqueLocations.length} locations, ${listings.length} properties`);
+          console.log(`📍 Centered at: ${centerLat.toFixed(4)}, ${centerLng.toFixed(4)} (zoom: ${zoom})`);
+          console.log(`🗺️ Locations: ${uniqueLocations.join(', ')}`);
         }
       }
-    } else {
-      // Default Marrakech center
-      centerLat = 31.6295;
-      centerLng = -7.9811;
-    }
-    
-    // Update map with markers showing property locations
-    if (mapIframe && markersParam) {
-      const zoom = uniqueLocations.length === 1 ? 14 : 12;
-      const newMapUrl = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d13596!2d${centerLng}!3d${centerLat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f${zoom}.1!5e0!3m2!1sen!2sma!4v1234567890${markersParam}`;
-      mapIframe.src = newMapUrl;
-      console.log(`Map updated: showing ${listings.length} properties in ${uniqueLocations.length} locations`);
     }
   } else {
     // Reset to default Marrakech view when no properties
