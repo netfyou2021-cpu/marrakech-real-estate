@@ -33,9 +33,9 @@
     
     <section id="listings" class="container">
         <h2 data-key="listingsTitle">Browse Properties</h2>
-        <div class="filters">
-            <input type="text" id="search-input" class="filter-search" placeholder="Search by keyword..." data-key="searchPlaceholder">
-            <select id="filter-location" class="filter-dropdown">
+        <div class="search-bar-section">
+            <input type="text" id="search-input" class="search-bar-input" placeholder="Search by keyword (e.g., Gueliz)" data-key="searchPlaceholder">
+            <select id="filter-location" class="search-bar-dropdown">
                 <option value="all">All Locations</option>
                 <option value="Gueliz">Gueliz</option>
                 <option value="Medina">Medina</option>
@@ -52,6 +52,8 @@
                 <option value="Sidi Ghanem">Sidi Ghanem</option>
                 <option value="Amerchich">Amerchich</option>
             </select>
+        </div>
+        <div class="filters">
             <select id="filter-type" class="filter-dropdown">
                 <option value="all">Listing type</option>
                 <option value="apartment">Apartment</option>
@@ -94,7 +96,7 @@
                 <option value="1000">1000+</option>
             </select>
             <select id="filter-action" class="filter-dropdown">
-                <option value="all">Favorites</option>
+                <option value="all">Any</option>
                 <option value="rent">Rent</option>
                 <option value="buy">Buy</option>
             </select>
@@ -113,8 +115,10 @@
                 <!-- Listings loaded here -->
             </div>
             <aside class="map">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3399.1234!2d-8.0089!3d31.6295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdafef3d!2zTW9yb2NjbywgTW9yb2Njbw!5e0!3m2!1sen!2sus!4v1234567890" width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                <p data-key="mapNote">Map shows general Marrakech locations. Click markers for details.</p>
+                <div id="map-container" style="width:100%;height:400px;background:#f5f5f5;border-radius:8px;position:relative;">
+                    <iframe id="map-iframe" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3399.1234!2d-8.0089!3d31.6295!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdafef3d!2zTW9yb2NjbywgTW9yb2Njbw!5e0!3m2!1sen!2sus!4v1234567890" width="100%" height="100%" style="border:0;border-radius:8px;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                <p id="map-note" data-key="mapNote">Showing <span id="map-count">0</span> properties on map</p>
             </aside>
         </div>
     </section>

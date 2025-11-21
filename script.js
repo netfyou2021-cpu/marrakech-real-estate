@@ -151,14 +151,28 @@ async function applyAndLoad() {
 }
 
 function updateMapMarkers() {
-  // Update map to show filtered listings
-  // Note: For production, integrate Google Maps API to add dynamic markers
-  // Marrakech neighborhood coordinates:
-  // Gueliz: 31.6347, -8.0089 | Medina: 31.6295, -7.9811
-  // Palmeraie: 31.6692, -8.0428 | Hivernage: 31.6219, -8.0182
-  const mapNote = document.querySelector('.map p');
-  if (mapNote && listings.length > 0) {
-    mapNote.textContent = `Showing ${listings.length} ${listings.length === 1 ? 'property' : 'properties'} on map`;
+  // Update map count
+  const mapCount = document.getElementById('map-count');
+  if (mapCount) {
+    mapCount.textContent = listings.length;
+  }
+  
+  // For dynamic markers, you can integrate Google Maps JavaScript API
+  // Location coordinates for Marrakech neighborhoods:
+  const locationCoords = {
+    'Gueliz': {lat: 31.6347, lng: -8.0089},
+    'Medina': {lat: 31.6295, lng: -7.9811},
+    'Palmeraie': {lat: 31.6692, lng: -8.0428},
+    'Hivernage': {lat: 31.6219, lng: -8.0182},
+    'Agdal': {lat: 31.6156, lng: -8.0089},
+    'Marrakech Centre': {lat: 31.6295, lng: -7.9811}
+  };
+  
+  // If you have Google Maps API key, you can dynamically add markers here
+  // This will show exact locations of filtered properties
+  if (listings.length > 0 && listings[0].location) {
+    // Future enhancement: Update iframe src or use Google Maps JS API
+    console.log(`Map showing ${listings.length} properties`);
   }
 }
 
