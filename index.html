@@ -10,7 +10,7 @@
 <body>
     <header>
         <nav>
-            <div class="logo">Marrakech Realty</div>
+            <div class="logo">Atlas HomesMarrakech</div>
             <ul>
                 <li><a href="#home" data-key="home">Home</a></li>
                 <li><a href="#listings" data-key="listings">Listings</a></li>
@@ -28,16 +28,30 @@
         <div class="hero-inner">
             <h1 data-key="heroTitle">Find Your Dream Property in Marrakech</h1>
             <p data-key="heroSubtitle">Rent or buy apartments, villas, lands, and garages with ease.</p>
-            <div class="search-bar">
-                <input type="text" id="search-input" placeholder="Search by location or keyword (e.g., Gueliz)" data-key="searchPlaceholder">
-                <button id="search-btn" data-key="searchBtn">Search</button>
-            </div>
         </div>
     </section>
     
     <section id="listings" class="container">
         <h2 data-key="listingsTitle">Browse Properties</h2>
         <div class="filters">
+            <input type="text" id="search-input" class="filter-search" placeholder="Search by keyword..." data-key="searchPlaceholder">
+            <select id="filter-location" class="filter-dropdown">
+                <option value="all">All Locations</option>
+                <option value="Gueliz">Gueliz</option>
+                <option value="Medina">Medina</option>
+                <option value="Hivernage">Hivernage</option>
+                <option value="Palmeraie">Palmeraie</option>
+                <option value="Agdal">Agdal</option>
+                <option value="Marrakech Centre">Marrakech Centre</option>
+                <option value="Route de Fes">Route de Fes</option>
+                <option value="Route de Casablanca">Route de Casablanca</option>
+                <option value="Route de Ouarzazate">Route de Ouarzazate</option>
+                <option value="Route de l'Ourika">Route de l'Ourika</option>
+                <option value="Targa">Targa</option>
+                <option value="Massar">Massar</option>
+                <option value="Sidi Ghanem">Sidi Ghanem</option>
+                <option value="Amerchich">Amerchich</option>
+            </select>
             <select id="filter-type" class="filter-dropdown">
                 <option value="all">Listing type</option>
                 <option value="apartment">Apartment</option>

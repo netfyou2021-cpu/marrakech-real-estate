@@ -129,6 +129,7 @@ function renderListings() {
 
 async function applyAndLoad() {
   const search = document.getElementById('search-input').value || '';
+  const location = document.getElementById('filter-location').value || 'all';
   const type = document.getElementById('filter-type').value || 'all';
   const action = document.getElementById('filter-action').value || 'all';
   const minPrice = document.getElementById('min-price').value || '';
@@ -136,6 +137,7 @@ async function applyAndLoad() {
   const minSurface = document.getElementById('min-surface').value || '';
   const sort = document.getElementById('sort-by') ? document.getElementById('sort-by').value || 'created_desc' : 'created_desc';
   const params = {};
+  if (location && location!=='all') params.location = location;
   if (type && type!=='all') params.type = type;
   if (action && action!=='all') params.action = action;
   if (search) params.q = search;
@@ -160,7 +162,8 @@ function updateMapMarkers() {
   }
 }
 
-document.getElementById('search-btn').addEventListener('click', applyAndLoad);
+document.getElementById('search-input').addEventListener('input', applyAndLoad);
+document.getElementById('filter-location').addEventListener('change', applyAndLoad);
 document.getElementById('filter-type').addEventListener('change', applyAndLoad);
 document.getElementById('filter-action').addEventListener('change', applyAndLoad);
 document.getElementById('min-price').addEventListener('change', applyAndLoad);
