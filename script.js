@@ -178,25 +178,39 @@ function updateMapMarkers() {
     const mapIframe = document.getElementById('map-iframe');
     const uniqueLocations = [...new Set(listings.map(l => l.location).filter(Boolean))];
     
-    // Create markers parameter string
-    let markersParam = '';
-    let centerLat = 31.6295;
-    let centerLng = -7.9811;
+    // Create markers parameter string and calculate center
+    let centerLat = 0;
+    let centerLng = 0;
+    let validCount = 0;
     
     if (uniqueLocations.length > 0) {
       uniqueLocations.forEach((loc) => {
         const coords = locationCoords[loc];
         if (coords) {
-          const count = listings.filter(l => l.location === loc).length;
-          markersParam += `&markers=color:red%7Clabel:${count}%7C${coords.lat},${coords.lng}`;
+          centerLat += coords.lat;
+          centerLng += coords.lng;
+          validCount++;
         }
       });
       
-      // Center map on first location if only one
-      if (uniqueLocations.length === 1 && locationCoords[uniqueLocations[0]]) {
-        centerLat = locationCoords[uniqueLocations[0]].lat;
-        centerLng = locationCoords[uniqueLocations[0]].lng;
+      // Calculate average center point
+      if (validCount > 0) {
+        centerLat = centerLat / validCount;
+        centerLng = centerLng / validCount;
+        
+        // Update map iframe with new center and zoom
+        const zoom = uniqueLocations.length === 1 ? 15 : (uniqueLocations.length <= 3 ? 13 : 12);
+        const newSrc = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d13196!2d${centerLng}!3d${centerLat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f${zoom}.1!5e0!3m2!1sen!2sus!4v${Date.now()}`;
+        
+        if (mapIframe && mapIframe.src !== newSrc) {
+          mapIframe.src = newSrc;
+          console.log(`Map recentered to ${uniqueLocations.join(', ')} - showing ${listings.length} properties`);
+        }
       }
+    } else {
+      // Default Marrakech center
+      centerLat = 31.6295;
+      centerLng = -7.9811;
     }
     
     // Update map with markers showing property locations
