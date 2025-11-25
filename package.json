@@ -1,0 +1,19 @@
+{
+  "name": "atlas-real-estate",
+  "version": "1.0.0",
+  "description": "Atlas Real Estate - Marrakech Property Listings",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo 'No build step required'"
+  },
+  "engines": {
+    "node": ">=18.x"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.9.0"
+  },
+  "author": "Atlas Real Estate",
+  "license": "MIT"
+}
