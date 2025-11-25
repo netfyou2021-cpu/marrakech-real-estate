@@ -266,34 +266,19 @@ function showEnhancedModal(property) {
 }
 
 async function applyAndLoad() {
-  const search = document.getElementById('search-input').value || '';
-  const type = document.getElementById('filter-type').value || 'all';
-  const action = document.getElementById('filter-action').value || 'all';
-  const minPrice = document.getElementById('min-price').value || '';
-  const maxPrice = document.getElementById('max-price').value || '';
-  const minRooms = document.getElementById('min-rooms').value || '';
-  const minSurface = document.getElementById('min-surface').value || '';
-  const sort = document.getElementById('sort-by') ? document.getElementById('sort-by').value || 'created_desc' : 'created_desc';
+  // Fetch all listings without any filters
   const params = {};
-  if (type && type!=='all') params.type = type;
-  if (action && action!=='all') params.action = action;
-  if (search) params.q = search;
-  if (minPrice) params.minPrice = minPrice;
-  if (maxPrice) params.maxPrice = maxPrice;
-  if (minRooms) params.minRooms = minRooms;
-  if (minSurface) params.minSurface = minSurface;
-  if (sort) params.sort = sort;
   
-  console.log('🔍 Searching with params:', params);
+  console.log('🔍 Loading all listings (no filters applied)');
   await fetchListingsFromApi(params);
-  console.log(`📊 Found ${listings.length} listings`);
+  console.log(`📊 Showing all ${listings.length} listings`);
   
   renderListings();
   
   // Force map update after rendering with a delay to ensure DOM is ready
   requestAnimationFrame(() => {
     setTimeout(() => {
-      console.log('🗺️ Updating map with filtered results...');
+      console.log('🗺️ Updating map with all listings...');
       updateMapMarkers();
     }, 200);
   });
@@ -430,14 +415,15 @@ function updateMapMarkers() {
 
 document.getElementById('search-btn').addEventListener('click', applyAndLoad);
 document.getElementById('search-input').addEventListener('keypress', (e)=>{ if(e.key==='Enter') applyAndLoad(); });
-document.getElementById('filter-type').addEventListener('change', applyAndLoad);
-document.getElementById('filter-action').addEventListener('change', applyAndLoad);
-document.getElementById('min-price').addEventListener('change', applyAndLoad);
-document.getElementById('max-price').addEventListener('change', applyAndLoad);
-document.getElementById('min-rooms').addEventListener('change', applyAndLoad);
-document.getElementById('min-surface').addEventListener('change', applyAndLoad);
+// Filters disabled - showing all listings
+// document.getElementById('filter-type').addEventListener('change', applyAndLoad);
+// document.getElementById('filter-action').addEventListener('change', applyAndLoad);
+// document.getElementById('min-price').addEventListener('change', applyAndLoad);
+// document.getElementById('max-price').addEventListener('change', applyAndLoad);
+// document.getElementById('min-rooms').addEventListener('change', applyAndLoad);
+// document.getElementById('min-surface').addEventListener('change', applyAndLoad);
 if (document.getElementById('sort-by')) {
-  document.getElementById('sort-by').addEventListener('change', applyAndLoad);
+  // document.getElementById('sort-by').addEventListener('change', applyAndLoad);
 }
 document.getElementById('language-select').addEventListener('change', (e) => {
   applyTranslationsFor(e.target.value);
