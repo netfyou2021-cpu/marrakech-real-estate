@@ -392,6 +392,19 @@ function updateMapMarkers() {
           .addTo(map)
           .bindPopup(`<div style="padding:8px"><strong>${displayLocation}</strong><br>${count} ${count === 1 ? 'property' : 'properties'}</div>`);
         
+        // Add click handler to marker
+        marker.on('click', () => {
+          // Filter to show listings for this location
+          const locationListings = listings.filter(l => findCoords(l.location) && 
+            findCoords(l.location).lat === coords.lat && 
+            findCoords(l.location).lng === coords.lng);
+          
+          if (locationListings.length > 0) {
+            // Show the first property in detail modal
+            showEnhancedModal(locationListings[0]);
+          }
+        });
+        
         markers.push(marker);
         bounds.push([coords.lat, coords.lng]);
       }
