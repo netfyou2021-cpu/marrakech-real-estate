@@ -184,12 +184,12 @@ function renderListings() {
     card.innerHTML = `
       <div class="image-wrapper">
         <img src="${l.images && l.images[0] ? l.images[0] : 'https://via.placeholder.com/600x400?text=No+Image'}" alt="${l.title}">
+        <div class="price-badge">${formatPrice(l)}</div>
         <div class="type-badge">${typeLabel}</div>
         <div class="location-badge">📍 ${locationName}</div>
       </div>
       <div class="content">
         <h3>${l.title}</h3>
-        <div class="price-tag">${formatPrice(l)}</div>
         <div class="meta">${metaItems.join('')}</div>
         <p class="excerpt">${l.description || ''}</p>
       </div>
