@@ -513,6 +513,7 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       
       const formData = {
+        id: Date.now(),
         name: document.getElementById('req-name').value,
         email: document.getElementById('req-email').value,
         phone: document.getElementById('req-phone').value,
@@ -523,8 +524,14 @@ document.addEventListener('DOMContentLoaded', () => {
         rooms: document.getElementById('req-rooms').value || 'Any',
         details: document.getElementById('req-details').value,
         premium: document.getElementById('req-premium').checked,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        status: 'pending'
       };
+
+      // Save to localStorage for admin panel
+      const existingRequests = JSON.parse(localStorage.getItem('customerRequests') || '[]');
+      existingRequests.push(formData);
+      localStorage.setItem('customerRequests', JSON.stringify(existingRequests));
 
       console.log('Customer Request:', formData);
       

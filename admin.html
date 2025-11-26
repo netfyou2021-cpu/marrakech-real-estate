@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Customer Requests</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; padding: 2rem; }
+        .admin-container { max-width: 1400px; margin: 0 auto; }
+        .header { background: #c14b1a; color: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; }
+        .header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .stat-card h3 { color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .stat-card .number { font-size: 2rem; font-weight: bold; color: #c14b1a; }
+        .requests-container { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .filters { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .filter-btn { padding: 0.6rem 1.2rem; border: 2px solid #ddd; background: white; border-radius: 8px; cursor: pointer; font-size: 0.95rem; transition: all 0.2s; }
+        .filter-btn.active { background: #c14b1a; color: white; border-color: #c14b1a; }
+        .request-card { background: #fafafa; border: 2px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; transition: all 0.3s; }
+        .request-card:hover { border-color: #c14b1a; box-shadow: 0 4px 12px rgba(193,75,26,0.1); }
+        .request-header { display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem; }
+        .request-info h3 { font-size: 1.2rem; color: #333; margin-bottom: 0.5rem; }
+        .request-meta { color: #666; font-size: 0.9rem; }
+        .premium-badge { background: linear-gradient(135deg, #ffd700, #ffed4e); color: #000; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.85rem; font-weight: bold; display: inline-block; }
+        .request-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+        .detail-item { display: flex; flex-direction: column; }
+        .detail-label { font-size: 0.85rem; color: #666; margin-bottom: 0.25rem; }
+        .detail-value { font-weight: 600; color: #333; }
+        .request-requirements { background: white; padding: 1rem; border-radius: 8px; margin-top: 1rem; }
+        .request-requirements p { color: #555; line-height: 1.6; }
+        .request-actions { display: flex; gap: 0.75rem; margin-top: 1rem; }
+        .btn { padding: 0.6rem 1.2rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .btn-contact { background: #25D366; color: white; }
+        .btn-email { background: #0066cc; color: white; }
+        .btn-complete { background: #4caf50; color: white; }
+        .btn-delete { background: #f44336; color: white; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .empty-state { text-align: center; padding: 4rem 2rem; color: #999; }
+        .empty-state svg { width: 100px; height: 100px; margin-bottom: 1rem; opacity: 0.3; }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="header">
+            <h1>🏠 Customer Requests Dashboard</h1>
+            <p>Manage and respond to property search requests</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3>Total Requests</h3>
+                <div class="number" id="total-requests">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Premium Requests</h3>
+                <div class="number" id="premium-requests">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Pending</h3>
+                <div class="number" id="pending-requests">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>This Week</h3>
+                <div class="number" id="week-requests">0</div>
+            </div>
+        </div>
+
+        <div class="requests-container">
+            <h2 style="margin-bottom: 1rem;">Customer Requests</h2>
+            
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All Requests</button>
+                <button class="filter-btn" data-filter="premium">Premium Only</button>
+                <button class="filter-btn" data-filter="rent">For Rent</button>
+                <button class="filter-btn" data-filter="buy">For Sale</button>
+            </div>
+
+            <div id="requests-list">
+                <!-- Sample Request Card (will be populated by JavaScript) -->
+                <div class="empty-state">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/>
+                    </svg>
+                    <h3>No customer requests yet</h3>
+                    <p>When customers submit property requests, they will appear here.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load requests from localStorage or use sample data
+        let customerRequests = JSON.parse(localStorage.getItem('customerRequests') || '[]');
+        
+        // If no requests in localStorage, show sample data
+        if (customerRequests.length === 0) {
+            customerRequests = [
+                {
+                    id: 1,
+                    name: "Ahmed Bennani",
+                    email: "ahmed.bennani@example.com",
+                    phone: "+212 6 12 34 56 78",
+                    type: "villa",
+                    action: "buy",
+                    budget: 2500000,
+                    location: "Palmeraie",
+                    rooms: 4,
+                    details: "Looking for a luxury villa with pool, garden, and mountain views. Prefer modern architecture.",
+                    premium: true,
+                    timestamp: new Date('2025-11-25T10:30:00'),
+                    status: 'pending'
+                },
+                {
+                    id: 2,
+                    name: "Sarah Martin",
+                    email: "sarah.martin@example.com",
+                    phone: "+212 6 23 45 67 89",
+                    type: "apartment",
+                    action: "rent",
+                    budget: 8000,
+                    location: "Gueliz",
+                    rooms: 2,
+                    details: "Furnished apartment needed for 6 months. Close to restaurants and shops.",
+                    premium: false,
+                    timestamp: new Date('2025-11-26T09:15:00'),
+                    status: 'pending'
+                },
+                {
+                    id: 3,
+                    name: "Mohammed Alami",
+                    email: "m.alami@example.com",
+                    phone: "+212 6 34 56 78 90",
+                    type: "riad",
+                    action: "buy",
+                    budget: 1800000,
+                    location: "Medina",
+                    rooms: 5,
+                    details: "Traditional riad for renovation. Authentic features preferred.",
+                    premium: true,
+                    timestamp: new Date('2025-11-24T14:20:00'),
+                    status: 'pending'
+                }
+            ];
+        }
+
+        // Update statistics
+        function updateStats() {
+            const total = customerRequests.length;
+            const premium = customerRequests.filter(r => r.premium).length;
+            const pending = customerRequests.filter(r => r.status === 'pending').length;
+            const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+            const thisWeek = customerRequests.filter(r => new Date(r.timestamp) > weekAgo).length;
+
+            document.getElementById('total-requests').textContent = total;
+            document.getElementById('premium-requests').textContent = premium;
+            document.getElementById('pending-requests').textContent = pending;
+            document.getElementById('week-requests').textContent = thisWeek;
+        }
+
+        // Render requests
+        function renderRequests(filter = 'all') {
+            const container = document.getElementById('requests-list');
+            let filtered = customerRequests;
+
+            if (filter === 'premium') filtered = customerRequests.filter(r => r.premium);
+            else if (filter === 'rent') filtered = customerRequests.filter(r => r.action === 'rent');
+            else if (filter === 'buy') filtered = customerRequests.filter(r => r.action === 'buy');
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No requests found</h3>
+                        <p>Try a different filter.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filtered.map(req => `
+                <div class="request-card" data-id="${req.id}">
+                    <div class="request-header">
+                        <div class="request-info">
+                            <h3>${req.name} ${req.premium ? '<span class="premium-badge">⭐ PREMIUM</span>' : ''}</h3>
+                            <div class="request-meta">
+                                📅 ${new Date(req.timestamp).toLocaleDateString()} at ${new Date(req.timestamp).toLocaleTimeString()}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="request-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Contact</span>
+                            <span class="detail-value">${req.email}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Phone</span>
+                            <span class="detail-value">${req.phone}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Property Type</span>
+                            <span class="detail-value">${req.type.charAt(0).toUpperCase() + req.type.slice(1)}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Action</span>
+                            <span class="detail-value">${req.action === 'rent' ? '🔑 For Rent' : '💰 For Sale'}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Budget</span>
+                            <span class="detail-value">${req.budget.toLocaleString()} MAD</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Location</span>
+                            <span class="detail-value">${req.location}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Rooms</span>
+                            <span class="detail-value">${req.rooms || 'Any'}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="request-requirements">
+                        <strong>Additional Requirements:</strong>
+                        <p>${req.details || 'No additional requirements specified.'}</p>
+                    </div>
+                    
+                    <div class="request-actions">
+                        <button class="btn btn-contact" onclick="contactWhatsApp('${req.phone}', '${req.name}')">
+                            💬 WhatsApp
+                        </button>
+                        <button class="btn btn-email" onclick="contactEmail('${req.email}', '${req.name}')">
+                            📧 Email
+                        </button>
+                        <button class="btn btn-complete" onclick="markComplete(${req.id})">
+                            ✓ Mark Complete
+                        </button>
+                        <button class="btn btn-delete" onclick="deleteRequest(${req.id})">
+                            🗑 Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                renderRequests(e.target.dataset.filter);
+            });
+        });
+
+        // Contact functions
+        function contactWhatsApp(phone, name) {
+            const message = `Hello ${name}, thank you for your property request. I'd like to discuss your requirements.`;
+            const cleanPhone = phone.replace(/[^0-9]/g, '');
+            window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function contactEmail(email, name) {
+            const subject = `Your Property Request - Atlas Marrakech Homes`;
+            const body = `Dear ${name},\n\nThank you for submitting your property request. We have reviewed your requirements and would like to discuss some options with you.\n\nBest regards,\nAtlas Marrakech Homes`;
+            window.location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        }
+
+        function markComplete(id) {
+            const index = customerRequests.findIndex(r => r.id === id);
+            if (index !== -1) {
+                customerRequests[index].status = 'completed';
+                localStorage.setItem('customerRequests', JSON.stringify(customerRequests));
+                alert('Request marked as complete!');
+                renderRequests('all');
+                updateStats();
+            }
+        }
+
+        function deleteRequest(id) {
+            if (confirm('Are you sure you want to delete this request?')) {
+                customerRequests = customerRequests.filter(r => r.id !== id);
+                localStorage.setItem('customerRequests', JSON.stringify(customerRequests));
+                renderRequests('all');
+                updateStats();
+                alert('Request deleted!');
+            }
+        }
+
+        // Initialize
+        updateStats();
+        renderRequests('all');
+
+        // Listen for new requests from localStorage (if form submits store here)
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'customerRequests') {
+                customerRequests = JSON.parse(e.newValue) || [];
+                updateStats();
+                renderRequests('all');
+            }
+        });
+    </script>
+</body>
+</html>
