@@ -494,6 +494,90 @@ function copyToClipboard(text) {
   alert('Property link copied to clipboard!');
 }
 
+// Customer Request Form Handler
+document.addEventListener('DOMContentLoaded', () => {
+  const requestForm = document.getElementById('customer-request-form');
+  const premiumCheckbox = document.getElementById('req-premium');
+  const payButton = document.getElementById('pay-now-btn');
+
+  // Show/hide payment button based on premium checkbox
+  if (premiumCheckbox && payButton) {
+    premiumCheckbox.addEventListener('change', (e) => {
+      payButton.style.display = e.target.checked ? 'block' : 'none';
+    });
+  }
+
+  // Handle form submission
+  if (requestForm) {
+    requestForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = {
+        name: document.getElementById('req-name').value,
+        email: document.getElementById('req-email').value,
+        phone: document.getElementById('req-phone').value,
+        type: document.getElementById('req-type').value,
+        action: document.getElementById('req-action').value,
+        budget: document.getElementById('req-budget').value,
+        location: document.getElementById('req-location').value,
+        rooms: document.getElementById('req-rooms').value || 'Any',
+        details: document.getElementById('req-details').value,
+        premium: document.getElementById('req-premium').checked,
+        timestamp: new Date().toISOString()
+      };
+
+      console.log('Customer Request:', formData);
+      
+      // Show success message
+      alert(`✅ Request Submitted Successfully!\n\nThank you ${formData.name}!\nWe'll contact you within 24 hours at ${formData.email}\n\n${formData.premium ? 'Premium service activated! Our dedicated agent will reach out shortly.' : 'Standard request received.'}`);
+      
+      // If premium is selected, show payment option
+      if (formData.premium) {
+        const proceed = confirm('Would you like to pay now (500 MAD) to activate premium service immediately?');
+        if (proceed) {
+          handlePayment(formData);
+        }
+      }
+      
+      // Reset form
+      requestForm.reset();
+      payButton.style.display = 'none';
+    });
+  }
+
+  // Handle payment button click
+  if (payButton) {
+    payButton.addEventListener('click', () => {
+      const formData = {
+        name: document.getElementById('req-name').value,
+        email: document.getElementById('req-email').value,
+        phone: document.getElementById('req-phone').value
+      };
+      
+      if (formData.name && formData.email) {
+        handlePayment(formData);
+      } else {
+        alert('Please fill in your name and email first.');
+      }
+    });
+  }
+});
+
+// Payment handler (Stripe integration placeholder)
+function handlePayment(formData) {
+  // This is a placeholder for Stripe integration
+  // In production, you would integrate with Stripe API
+  
+  const paymentUrl = `https://buy.stripe.com/test_payment?prefilled_email=${encodeURIComponent(formData.email)}&client_reference_id=${encodeURIComponent(formData.name)}`;
+  
+  alert(`💳 Payment Integration\n\nIn production, this would redirect to Stripe payment page.\n\nAmount: 500 MAD\nService: Premium Property Search\n\nFor now, you can:\n1. Integrate Stripe Payment Links\n2. Use PayPal\n3. Bank transfer details`);
+  
+  // Example: Redirect to Stripe payment (replace with your actual Stripe link)
+  // window.open(paymentUrl, '_blank');
+  
+  console.log('Payment initiated for:', formData);
+}
+
 (async ()=>{
   await loadI18n();
   applyTranslationsFor(document.getElementById('language-select').value || 'en');

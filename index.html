@@ -21,6 +21,7 @@
             <ul class="nav-center">
                 <li><a href="#home" data-key="home">Home</a></li>
                 <li><a href="#listings" data-key="listings">Listings</a></li>
+                <li><a href="#customer-request">Request</a></li>
                 <li><a href="#contact" data-key="contact">Contact</a></li>
             </ul>
             <select id="language-select">
@@ -144,6 +145,91 @@
                 <div id="map-container" style="width:100%;height:450px;background:#f5f5f5;border-radius:8px;position:relative;z-index:1;"></div>
                 <p id="map-note" data-key="mapNote">Showing <span id="map-count">0</span> properties on map</p>
             </aside>
+        </div>
+    </section>
+
+    <!-- Customer Request Section -->
+    <section id="customer-request" class="customer-request-section">
+        <div class="container">
+            <h2 class="section-title">📋 Submit Your Property Request</h2>
+            <p class="section-subtitle">Can't find what you're looking for? Tell us your requirements and we'll find the perfect property for you.</p>
+            
+            <form id="customer-request-form" class="request-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="req-name">Full Name *</label>
+                        <input type="text" id="req-name" required placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="req-email">Email *</label>
+                        <input type="email" id="req-email" required placeholder="john@example.com">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="req-phone">Phone Number *</label>
+                        <input type="tel" id="req-phone" required placeholder="+212 6XX XXX XXX">
+                    </div>
+                    <div class="form-group">
+                        <label for="req-type">Property Type *</label>
+                        <select id="req-type" required>
+                            <option value="">Select type</option>
+                            <option value="apartment">Apartment</option>
+                            <option value="villa">Villa</option>
+                            <option value="house">House</option>
+                            <option value="riad">Riad</option>
+                            <option value="land">Land</option>
+                            <option value="commercial">Commercial</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="req-action">Looking to *</label>
+                        <select id="req-action" required>
+                            <option value="">Select action</option>
+                            <option value="rent">Rent</option>
+                            <option value="buy">Buy</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="req-budget">Budget (MAD) *</label>
+                        <input type="number" id="req-budget" required placeholder="50000">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="req-location">Preferred Location *</label>
+                        <input type="text" id="req-location" required placeholder="Gueliz, Hivernage, Medina...">
+                    </div>
+                    <div class="form-group">
+                        <label for="req-rooms">Number of Rooms</label>
+                        <input type="number" id="req-rooms" placeholder="3" min="1">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="req-details">Additional Requirements</label>
+                    <textarea id="req-details" rows="4" placeholder="Please describe any specific requirements: pool, garden, parking, furnished, etc."></textarea>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <label>
+                        <input type="checkbox" id="req-premium" value="premium">
+                        <span>Premium Service (500 MAD) - Priority search with dedicated agent and 3 exclusive property viewings</span>
+                    </label>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit">Submit Request</button>
+                    <button type="button" id="pay-now-btn" class="btn-pay" style="display:none;">💳 Pay Now with Stripe</button>
+                </div>
+
+                <p class="form-note">* Required fields. We'll contact you within 24 hours with matching properties.</p>
+            </form>
         </div>
     </section>
     
