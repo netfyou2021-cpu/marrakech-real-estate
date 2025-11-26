@@ -6,10 +6,10 @@
 *{box-sizing:border-box}
 body{margin:0;background:linear-gradient(180deg,#fffaf0 0%, #fff 100%);color:var(--muted);font-family:var(--font-family, Roboto),sans-serif}
 header{background:rgba(193,75,26,0.06);padding:0.6rem 1rem;border-bottom:1px solid rgba(0,0,0,0.04)}
-nav{max-width:var(--max-width);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:2rem}
-.logo{font-weight:700;color:var(--accent);font-size:1.4rem;letter-spacing:0.5px;display:flex;align-items:center;gap:0.5rem;flex-shrink:0}
+nav{max-width:var(--max-width);margin:0 auto;display:flex;align-items:center;gap:2rem}
+.logo{font-weight:700;color:var(--accent);font-size:1.4rem;letter-spacing:0.5px;display:flex;align-items:center;gap:0.5rem;flex-shrink:0;margin-right:auto}
 .logo svg{width:28px;height:28px;flex-shrink:0}
-.nav-center{list-style:none;margin:0;padding:0;display:flex;gap:2rem;position:absolute;left:50%;transform:translateX(-50%)}
+.nav-center{list-style:none;margin:0;padding:0;display:flex;gap:2rem;margin-right:auto}
 nav ul li a{color:var(--muted);text-decoration:none;font-weight:500;transition:color 0.2s;font-size:1rem}
 nav ul li a:hover{color:var(--accent)}
 #language-select{padding:0.4rem 0.8rem;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer;font-size:0.9rem;color:#666}
@@ -71,8 +71,8 @@ nav ul li a:hover{color:var(--accent)}
 .property-card .actions button:hover{background:var(--accent-2);transform:translateY(-1px)}
 .property-card .location{display:none}
 .map{background:#fff;padding:0.5rem;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.04)}
-#map-container{width:100%;height:450px;position:relative;z-index:1;border-radius:8px;overflow:hidden}
-#map-container .leaflet-container{width:100%;height:100%;border-radius:8px}
+#map-container{width:100%;height:450px;position:relative;z-index:1;border-radius:8px;overflow:hidden;background:#e5e3df}
+#map-container .leaflet-container{width:100%;height:100%;border-radius:8px;z-index:1}
 footer{background:#1a1a1a;color:#ccc;padding:3rem 1rem 1rem}
 .footer-content{max-width:var(--max-width);margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:3rem;padding-bottom:2rem;border-bottom:1px solid #333}
 .footer-brand{}

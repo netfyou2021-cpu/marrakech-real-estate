@@ -5,16 +5,34 @@ let markers = [];
 function initMap() {
   if (map) return; // Already initialized
   
-  map = L.map('map-container').setView([31.6295, -7.9811], 12);
+  const mapContainer = document.getElementById('map-container');
+  if (!mapContainer) {
+    console.log('Map container not found, retrying...');
+    setTimeout(initMap, 500);
+    return;
+  }
   
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors',
-    maxZoom: 19
-  }).addTo(map);
-  
-  // Update map once initialized
-  if (listings.length > 0) {
-    updateMapMarkers();
+  try {
+    map = L.map('map-container').setView([31.6295, -7.9811], 12);
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors',
+      maxZoom: 19
+    }).addTo(map);
+    
+    // Force map to resize after initialization
+    setTimeout(() => {
+      if (map) map.invalidateSize();
+    }, 100);
+    
+    // Update map once initialized
+    if (listings.length > 0) {
+      updateMapMarkers();
+    }
+    
+    console.log('✅ Map initialized successfully');
+  } catch (error) {
+    console.error('Map initialization error:', error);
   }
 }
 
