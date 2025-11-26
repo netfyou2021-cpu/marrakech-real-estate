@@ -22,7 +22,14 @@ function initMap() {
     
     // Force map to resize after initialization
     setTimeout(() => {
-      if (map) map.invalidateSize();
+      if (map) {
+        map.invalidateSize();
+        // If listings are already loaded, add markers now
+        if (listings.length > 0) {
+          console.log('📍 Adding markers to map...');
+          updateMapMarkers();
+        }
+      }
     }, 100);
     
     // Update map once initialized
@@ -294,12 +301,15 @@ async function applyAndLoad() {
   renderListings();
   
   // Force map update after rendering with a delay to ensure DOM is ready
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      console.log('🗺️ Updating map with all listings...');
+  setTimeout(() => {
+    console.log('🗺️ Updating map with all listings...');
+    if (map && listings.length > 0) {
       updateMapMarkers();
-    }, 200);
-  });
+    } else if (!map) {
+      console.log('⏳ Map not ready yet, will retry...');
+      setTimeout(updateMapMarkers, 1000);
+    }
+  }, 500);
 }
 
 function updateMapMarkers() {
@@ -315,6 +325,8 @@ function updateMapMarkers() {
     setTimeout(updateMapMarkers, 500);
     return;
   }
+  
+  console.log(`📍 Adding markers for ${listings.length} listings...`);
   
   // Clear existing markers
   markers.forEach(marker => map.removeLayer(marker));
