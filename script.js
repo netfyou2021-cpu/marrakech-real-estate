@@ -497,6 +497,6 @@ function copyToClipboard(text) {
 (async ()=>{
   await loadI18n();
   applyTranslationsFor(document.getElementById('language-select').value || 'en');
-  await fetchListingsFromApi();
+  await applyAndLoad(); // Load listings and update map on page load
   renderListings();
 })();
