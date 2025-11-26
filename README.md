@@ -1,43 +1,94 @@
-# Marrakech Real Estate — Local Development
+# 🏠 Marrakech Real Estate Platform
 
-This workspace provides two server options so you can preview and develop a real-estate site locally.
+A modern, full-featured real estate listing platform for Marrakech properties. Built with vanilla JavaScript, Node.js, and PostgreSQL.
 
-Option A — Lightweight JSON server (fast, no native deps)
-- file: `server.js`
-- runs with: `node server.js`
-- port: 3000 (default)
-- Features: serves `index.html`, static files, and simple JSON-backed APIs: `/api/listings`, `/api/i18n`. Includes admin endpoints protected by `x-admin-token: dev-token`.
+## 🌟 Live Site
+**Production URL**: https://marrakech-real-estate.vercel.app
+**Admin Panel**: https://marrakech-real-estate.vercel.app/admin.html
+**Admin Token**: `f318525109e3a4943a33ceef25077af056a246886b4073072b4ecfc22cb153f0`
 
-Use this if you want a fast preview without installing native packages.
+## ✨ Features
 
-Option B — Express + SQLite (production-like)
-- file: `server_sqlite.js`
-- requires: `npm install` (installs `express`, `better-sqlite3`, etc.)
-- runs with: `node server_sqlite.js`
-- port: 3001 (default)
+- 🔍 **Advanced Search & Filters** - Search by location, type, price, action
+- 🗺️ **Interactive Map** - Leaflet map with property markers
+- 🌍 **Multi-Language** - English, French, Arabic support
+- 📱 **Responsive Design** - Works on all devices
+- 💾 **PostgreSQL Database** - Powered by Neon
+- 🚀 **Auto-Deploy** - Push to GitHub, deploys automatically
 
-Notes:
-- If `npm install` fails (native build environment restrictions), continue using Option A.
-- `server_sqlite.js` seeds a SQLite DB and exposes CRUD endpoints similar to Option A.
+## 📁 Key Files
 
-Frontend
-- Edit `index.html`, `script.js`, and `styles.css` to change the UI. `script.js` now tries to fetch `/api/listings` and `/api/i18n` and falls back to built-in data.
+- `index.html` - Main homepage
+- `admin.html` - Admin panel  
+- `styles.css` - All styling
+- `script.js` - Frontend logic
+- `server.js` - Backend API
+- `init-db.sql` - Database setup
+- `sample-properties.sql` - 12 additional property templates
 
-Run (Option A):
+## 🔧 Management Guides
+
+- **ADMIN-GUIDE.md** - How to add/manage properties
+- **BRANDING-GUIDE.md** - Customize colors and fonts
+- **DEPLOY_NOW.md** - Full deployment guide
+
+## 🚀 Quick Start (Local Development)
+
 ```bash
-node server.js
-# then open http://localhost:3000
-```
+# Clone repository
+git clone https://github.com/netfyou2021-cpu/marrakech-real-estate.git
+cd marrakech-real-estate
 
-Run (Option B):
-```bash
+# Install dependencies
 npm install
-node server_sqlite.js
-# then open http://localhost:3001
+
+# Start server
+node server.js
+
+# Open browser
+http://localhost:3000
 ```
 
-Admin API
-- Protected by header: `x-admin-token: dev-token` (set `ADMIN_TOKEN` env var to change)
-- Example: update i18n
-  curl -X POST -H "Content-Type: application/json" -H "x-admin-token: dev-token" --data @i18n.json http://localhost:3000/api/i18n
-# Deployment trigger - Mon Nov 17 12:11:02 UTC 2025
+## 🌐 Production Deployment
+
+This site is deployed on **Vercel** with **Neon PostgreSQL**.
+
+### Environment Variables (Already Set ✓)
+- `DATABASE_URL` - Neon PostgreSQL connection
+- `ADMIN_TOKEN` - Admin panel authentication
+
+### To Update Production
+```bash
+git add .
+git commit -m "Update"
+git push origin main
+```
+Vercel automatically deploys your changes!
+
+## 📊 Current Status
+
+✅ **Live & Running**
+- 6+ properties in database
+- Map with markers functional
+- Search & filters working
+- Multi-language support active
+- Admin panel secured
+
+## 🎨 Customization
+
+**Change Colors**: Edit `:root` in `styles.css`
+**Add Properties**: See `ADMIN-GUIDE.md`
+**Custom Domain**: Add in Vercel Dashboard → Domains
+
+## 📞 Admin Access
+
+- **URL**: https://marrakech-real-estate.vercel.app/admin.html
+- **Token**: `f318525109e3a4943a33ceef25077af056a246886b4073072b4ecfc22cb153f0`
+
+## 📄 License
+
+MIT License
+
+---
+
+**🏠 Your Marrakech Real Estate Platform is Live!**

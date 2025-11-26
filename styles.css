@@ -6,10 +6,13 @@
 *{box-sizing:border-box}
 body{margin:0;background:linear-gradient(180deg,#fffaf0 0%, #fff 100%);color:var(--muted);font-family:var(--font-family, Roboto),sans-serif}
 header{background:rgba(193,75,26,0.06);padding:0.6rem 1rem;border-bottom:1px solid rgba(0,0,0,0.04)}
-nav{max-width:var(--max-width);margin:0 auto;display:flex;align-items:center;gap:1rem}
-.logo{font-weight:700;color:var(--accent);font-size:1.4rem;letter-spacing:0.5px}
-nav ul{list-style:none;margin:0;padding:0;display:flex;gap:1rem;flex:1}
-nav a{color:var(--muted);text-decoration:none}
+nav{max-width:var(--max-width);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:2rem}
+.logo{font-weight:700;color:var(--accent);font-size:1.4rem;letter-spacing:0.5px;display:flex;align-items:center;gap:0.5rem;flex-shrink:0}
+.logo svg{width:28px;height:28px;flex-shrink:0}
+.nav-center{list-style:none;margin:0;padding:0;display:flex;gap:2rem;position:absolute;left:50%;transform:translateX(-50%)}
+nav ul li a{color:var(--muted);text-decoration:none;font-weight:500;transition:color 0.2s;font-size:1rem}
+nav ul li a:hover{color:var(--accent)}
+#language-select{padding:0.4rem 0.8rem;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer;font-size:0.9rem;color:#666}
 .hero{padding:5rem 1rem;min-height:60vh;background-size:cover;background-position:center;color:#fff;position:relative;overflow:hidden;display:flex;align-items:center;animation:slideshow 30s ease-in-out infinite}
 @keyframes slideshow{0%,33%{background-image:url('hero-marrakech.jpg');background-size:105%;background-position:center}34%,66%{background-image:url('hero-2.jpg');background-size:105%;background-position:center}67%,100%{background-image:url('hero-3.jpg');background-size:105%;background-position:center}}
 .hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.7) 100%);z-index:1;animation:fadeOverlay 30s ease-in-out infinite}
