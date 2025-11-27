@@ -109,8 +109,6 @@ function applyTranslationsFor(lang) {
   });
 }
 
-document.getElementById('language-select').addEventListener('change', (e) => applyTranslationsFor(e.target.value));
-
 // View toggle
 let currentView = 'grid';
 let allCollapsed = false;
@@ -502,10 +500,6 @@ if (languageBtn && languageDropdown) {
   });
 }
 
-document.getElementById('language-select').addEventListener('change', (e) => {
-  applyTranslationsFor(e.target.value);
-});
-
 // Schedule Viewing function
 window.scheduleViewing = function(propertyTitle) {
   const message = `Hello! I would like to schedule a viewing for: ${propertyTitle}`;
@@ -634,7 +628,7 @@ function handlePayment(formData) {
 
 (async ()=>{
   await loadI18n();
-  applyTranslationsFor(document.getElementById('language-select').value || 'en');
+  applyTranslationsFor('en');
   await applyAndLoad(); // Load listings and update map on page load
   renderListings();
 })();
