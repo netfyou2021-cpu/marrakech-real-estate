@@ -279,20 +279,9 @@
             }
         });
 
-        // Load properties from API or localStorage
-        async function loadProperties() {
-            try {
-                const response = await fetch('/api/listings');
-                if (response.ok) {
-                    properties = await response.json();
-                } else {
-                    // Fallback to localStorage
-                    properties = JSON.parse(localStorage.getItem('properties') || '[]');
-                }
-            } catch (error) {
-                properties = JSON.parse(localStorage.getItem('properties') || '[]');
-            }
-            
+        // Load properties from localStorage (instant load)
+        function loadProperties() {
+            properties = JSON.parse(localStorage.getItem('properties') || '[]');
             updateStats();
             renderProperties();
         }
