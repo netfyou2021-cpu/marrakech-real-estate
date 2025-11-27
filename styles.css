@@ -154,3 +154,12 @@ footer{background:#1a1a1a;color:#ccc;padding:3rem 1rem 1rem}
 .contact-agent strong{display:block;margin-bottom:0.5rem;color:#2a2a2a}
 
 @media (max-width:900px){.property-container{grid-template-columns:1fr}.property-card.list{flex-direction:column}.property-card.list .image-wrapper{width:100%}.modal-content{grid-template-columns:1fr;max-height:95vh}.modal-image{max-height:300px}.modal-details{padding:1.5rem}}
+
+/* RTL Support for Arabic */
+[dir="rtl"] .logo{margin-right:0;margin-left:auto}
+[dir="rtl"] .nav-center{margin-right:0;margin-left:auto}
+[dir="rtl"] .language-dropdown{right:auto;left:0}
+[dir="rtl"] .property-details p{text-align:right}
+[dir="rtl"] .property-actions{flex-direction:row-reverse}
+[dir="rtl"] .modal-details h2,[dir="rtl"] .modal-details p{text-align:right}
+[dir="rtl"] .modal-details ul{padding-right:1.5rem;padding-left:0}

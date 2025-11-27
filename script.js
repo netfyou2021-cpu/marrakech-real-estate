@@ -491,6 +491,15 @@ if (languageBtn && languageDropdown) {
       const langMap = { en: 'EN', fr: 'FR', ar: 'AR' };
       currentLangSpan.textContent = langMap[lang];
       
+      // Set text direction for RTL languages
+      if (lang === 'ar') {
+        document.documentElement.setAttribute('dir', 'rtl');
+        document.documentElement.setAttribute('lang', 'ar');
+      } else {
+        document.documentElement.setAttribute('dir', 'ltr');
+        document.documentElement.setAttribute('lang', lang);
+      }
+      
       // Apply translations
       applyTranslationsFor(lang);
       
