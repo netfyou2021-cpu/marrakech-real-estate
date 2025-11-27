@@ -515,6 +515,10 @@
             }
 
             localStorage.setItem('customerRequests', JSON.stringify(customerRequests));
+            
+            // Reload customerRequests from localStorage to ensure consistency
+            customerRequests = JSON.parse(localStorage.getItem('customerRequests') || '[]');
+            
             cancelForm();
             renderRequests('all');
             updateStats();
