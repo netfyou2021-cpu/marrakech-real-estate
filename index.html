@@ -70,25 +70,25 @@
         </div>
         <div class="filters">
             <select id="filter-type" class="filter-dropdown">
-                <option value="all">Listing type</option>
-                <option value="apartment">Apartment</option>
-                <option value="villa">Villa</option>
-                <option value="house">House</option>
-                <option value="riad">Riad</option>
-                <option value="land">Land</option>
-                <option value="garage">Garage</option>
-                <option value="commercial">Commercial</option>
-                <option value="building">Building</option>
-                <option value="warehouse">Warehouse</option>
+                <option value="all" data-key="filterListingType">Listing type</option>
+                <option value="apartment" data-key="filterApartment">Apartment</option>
+                <option value="villa" data-key="filterVilla">Villa</option>
+                <option value="house" data-key="filterHouse">House</option>
+                <option value="riad" data-key="filterRiad">Riad</option>
+                <option value="land" data-key="filterLand">Land</option>
+                <option value="garage" data-key="filterGarage">Garage</option>
+                <option value="commercial" data-key="filterCommercial">Commercial</option>
+                <option value="building" data-key="filterBuilding">Building</option>
+                <option value="warehouse" data-key="filterWarehouse">Warehouse</option>
             </select>
             <select id="filter-action" class="filter-dropdown filter-action-highlight">
-                <option value="all">🏠 Any</option>
-                <option value="rent">🔑 For Rent</option>
-                <option value="buy">💰 For Sale</option>
+                <option value="all" data-key="filterAny">🏠 Any</option>
+                <option value="rent" data-key="filterRent">🔑 For Rent</option>
+                <option value="buy" data-key="filterBuy">💰 For Sale</option>
             </select>
             <select id="min-rooms" class="filter-dropdown">
-                <option value="">Rooms</option>
-                <option value="">Any</option>
+                <option value="" data-key="filterRooms">Rooms</option>
+                <option value="" data-key="filterAnyRooms">Any</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -97,7 +97,7 @@
                 <option value="6">6+</option>
             </select>
             <select id="min-price" class="filter-dropdown">
-                <option value="">Min Price</option>
+                <option value="" data-key="filterMinPrice">Min Price</option>
                 <option value="3000">3,000 Dhrs</option>
                 <option value="5000">5,000 Dhrs</option>
                 <option value="10000">10,000 Dhrs</option>
@@ -109,7 +109,7 @@
                 <option value="2000000">2,000,000 Dhrs</option>
             </select>
             <select id="max-price" class="filter-dropdown">
-                <option value="">Max Price</option>
+                <option value="" data-key="filterMaxPrice">Max Price</option>
                 <option value="5000">5,000 Dhrs</option>
                 <option value="10000">10,000 Dhrs</option>
                 <option value="20000">20,000 Dhrs</option>
@@ -121,7 +121,7 @@
                 <option value="5000000">5,000,000 Dhrs</option>
             </select>
             <select id="min-surface" class="filter-dropdown">
-                <option value="">Surface (m²)</option>
+                <option value="" data-key="filterSurface">Surface (m²)</option>
                 <option value="20">20+</option>
                 <option value="50">50+</option>
                 <option value="100">100+</option>
@@ -132,9 +132,9 @@
                 <option value="1000">1000+</option>
             </select>
             <select id="sort-by" class="filter-dropdown">
-                <option value="created_desc">Sort by: Newest</option>
-                <option value="price_asc">Price: Low to High</option>
-                <option value="price_desc">Price: High to Low</option>
+                <option value="created_desc" data-key="sortNewest">Sort by: Newest</option>
+                <option value="price_asc" data-key="sortPriceLow">Price: Low to High</option>
+                <option value="price_desc" data-key="sortPriceHigh">Price: High to Low</option>
             </select>
         </div>
         <div class="view-toggle">
