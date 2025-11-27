@@ -45,6 +45,12 @@
         .image-thumb .remove-btn { position: absolute; top: 4px; right: 4px; background: #f44336; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 14px; }
         .image-thumb .main-badge { position: absolute; top: 4px; left: 4px; background: #4caf50; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; }
         .preview-section { margin: 1rem 0; padding: 1rem; background: #f5f5f5; border-radius: 8px; }
+        .image-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; border-bottom: 2px solid #e0e0e0; }
+        .image-tab { padding: 0.75rem 1.5rem; cursor: pointer; border: none; background: none; font-weight: 600; color: #666; border-bottom: 3px solid transparent; transition: all 0.2s; }
+        .image-tab.active { color: #c14b1a; border-bottom-color: #c14b1a; }
+        .image-tab:hover { color: #c14b1a; background: #fff8f0; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 </head>
 <body>
@@ -204,23 +210,39 @@
                         <textarea id="prop-description" rows="4" placeholder="Describe the property..."></textarea>
                     </div>
 
-                    <div class="form-group">
-                        <label>📷 Main Image *</label>
-                        <div style="background: white; padding: 1rem; border: 2px dashed #c14b1a; border-radius: 8px;">
-                            <input type="file" id="prop-image-file" accept="image/*" style="margin-bottom: 0.5rem;">
-                            <p style="font-size: 0.85rem; color: #666; margin: 0.5rem 0;">OR paste image URL:</p>
-                            <input type="url" id="prop-image" placeholder="https://example.com/image.jpg" style="width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px;">
-                            <div id="main-image-preview" style="margin-top: 0.5rem;"></div>
-                        </div>
-                    </div>
+                    <!-- Image Upload Section with Tabs -->
+                    <div class="form-group" style="grid-column: 1/-1;">
+                        <label>📷 Property Images *</label>
+                        <div style="background: white; padding: 1.5rem; border: 2px solid #c14b1a; border-radius: 8px;">
+                            
+                            <!-- Image Tabs -->
+                            <div class="image-tabs">
+                                <button type="button" class="image-tab active" onclick="switchImageTab('main')">🖼️ Main Image</button>
+                                <button type="button" class="image-tab" onclick="switchImageTab('additional')">🖼️ Additional Images</button>
+                            </div>
 
-                    <div class="form-group">
-                        <label>📸 Additional Images</label>
-                        <div style="background: white; padding: 1rem; border: 2px dashed #c14b1a; border-radius: 8px;">
-                            <input type="file" id="prop-images-files" accept="image/*" multiple style="margin-bottom: 0.5rem;">
-                            <p style="font-size: 0.85rem; color: #666; margin: 0.5rem 0;">OR paste image URLs (one per line):</p>
-                            <textarea id="prop-images" rows="3" placeholder="https://example.com/image2.jpg&#10;https://example.com/image3.jpg" style="width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px;"></textarea>
-                            <div id="additional-images-preview" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.5rem; margin-top: 0.5rem;"></div>
+                            <!-- Main Image Tab Content -->
+                            <div id="main-image-tab" class="tab-content active">
+                                <div style="background: #fff8f0; padding: 1rem; border: 2px dashed #c14b1a; border-radius: 8px;">
+                                    <h4 style="margin-bottom: 0.5rem; color: #c14b1a;">Upload Main Image</h4>
+                                    <input type="file" id="prop-image-file" accept="image/*" style="margin-bottom: 0.5rem;">
+                                    <p style="font-size: 0.85rem; color: #666; margin: 0.5rem 0;">OR paste image URL:</p>
+                                    <input type="url" id="prop-image" placeholder="https://example.com/image.jpg" style="width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px;">
+                                    <div id="main-image-preview" style="margin-top: 0.5rem;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Additional Images Tab Content -->
+                            <div id="additional-images-tab" class="tab-content">
+                                <div style="background: #fff8f0; padding: 1rem; border: 2px dashed #c14b1a; border-radius: 8px;">
+                                    <h4 style="margin-bottom: 0.5rem; color: #c14b1a;">Upload Additional Images</h4>
+                                    <input type="file" id="prop-images-files" accept="image/*" multiple style="margin-bottom: 0.5rem;">
+                                    <p style="font-size: 0.85rem; color: #666; margin: 0.5rem 0;">OR paste image URLs (one per line):</p>
+                                    <textarea id="prop-images" rows="3" placeholder="https://example.com/image2.jpg&#10;https://example.com/image3.jpg" style="width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px;"></textarea>
+                                    <div id="additional-images-preview" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.5rem; margin-top: 0.5rem;"></div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
@@ -752,6 +774,22 @@
         function updateGalleryPreview() {
             const images = getCurrentFormImages();
             renderImageGallery(images);
+        }
+
+        // Image tab switching
+        function switchImageTab(tabName) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.image-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to selected tab
+            if (tabName === 'main') {
+                document.querySelector('.image-tab:nth-child(1)').classList.add('active');
+                document.getElementById('main-image-tab').classList.add('active');
+            } else if (tabName === 'additional') {
+                document.querySelector('.image-tab:nth-child(2)').classList.add('active');
+                document.getElementById('additional-images-tab').classList.add('active');
+            }
         }
     </script>
 
