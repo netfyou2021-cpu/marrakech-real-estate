@@ -64,8 +64,8 @@ async function fetchListingsFromApi(params = {}) {
   // First, try to get properties from localStorage (admin panel)
   const localProperties = JSON.parse(localStorage.getItem('properties') || '[]');
   
-  // Filter only published properties
-  const publishedLocal = localProperties.filter(p => p.published !== false);
+  // Filter only published properties (explicitly check for true)
+  const publishedLocal = localProperties.filter(p => p.published === true);
   
   if (publishedLocal.length > 0) {
     // Use local properties if available

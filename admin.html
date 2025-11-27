@@ -326,6 +326,9 @@
                         <button class="btn btn-edit" onclick="editRequest(${req.id})">
                             ✏️ Edit
                         </button>
+                        <button class="btn btn-add" onclick="convertToProperty(${req.id})" style="background: #9c27b0;">
+                            🏢 Create Property
+                        </button>
                         <button class="btn btn-contact" onclick="contactWhatsApp('${req.phone}', '${req.name}')">
                             💬 WhatsApp
                         </button>
@@ -383,6 +386,47 @@
                 renderRequests('all');
                 updateStats();
                 alert('Request deleted!');
+            }
+        }
+
+        // Convert customer request to property listing
+        function convertToProperty(id) {
+            const request = customerRequests.find(r => r.id === id);
+            if (!request) return;
+
+            if (confirm(`Convert "${request.name}'s" request to a property listing?\n\nThis will create a new property in the Property Management section.`)) {
+                // Load existing properties
+                let properties = JSON.parse(localStorage.getItem('properties') || '[]');
+                
+                // Create property from request
+                const property = {
+                    id: Date.now(),
+                    title: `${request.type.charAt(0).toUpperCase() + request.type.slice(1)} in ${request.location}`,
+                    type: request.type,
+                    action: request.action,
+                    price: request.budget,
+                    location: request.location,
+                    surface: 0, // Default, can be edited later
+                    rooms: request.rooms || null,
+                    bathrooms: null,
+                    description: `${request.details || 'Property listing'}\n\nContact: ${request.name} (${request.email}, ${request.phone})`,
+                    image: request.images && request.images[0] ? request.images[0] : 'https://via.placeholder.com/600x400?text=No+Image',
+                    images: request.images || ['https://via.placeholder.com/600x400?text=No+Image'],
+                    coordinates: null,
+                    published: false, // Set as draft by default
+                    created_at: new Date().toISOString()
+                };
+                
+                properties.push(property);
+                localStorage.setItem('properties', JSON.stringify(properties));
+                
+                alert('✅ Property created successfully!\n\nGo to Property Management to edit details and publish it.');
+                
+                // Optionally mark request as complete
+                const markAsComplete = confirm('Mark this customer request as complete?');
+                if (markAsComplete) {
+                    markComplete(id);
+                }
             }
         }
 
