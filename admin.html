@@ -175,10 +175,10 @@
     </div>
 
     <script>
-        // Load requests from localStorage or use sample data
+        // Load requests from localStorage
         let customerRequests = JSON.parse(localStorage.getItem('customerRequests') || '[]');
         
-        // If no requests in localStorage, show sample data
+        // If no requests in localStorage, initialize with sample data and save it
         if (customerRequests.length === 0) {
             customerRequests = [
                 {
@@ -193,7 +193,7 @@
                     rooms: 4,
                     details: "Looking for a luxury villa with pool, garden, and mountain views. Prefer modern architecture.",
                     premium: true,
-                    timestamp: new Date('2025-11-25T10:30:00'),
+                    timestamp: new Date('2025-11-25T10:30:00').toISOString(),
                     status: 'pending'
                 },
                 {
@@ -208,7 +208,7 @@
                     rooms: 2,
                     details: "Furnished apartment needed for 6 months. Close to restaurants and shops.",
                     premium: false,
-                    timestamp: new Date('2025-11-26T09:15:00'),
+                    timestamp: new Date('2025-11-26T09:15:00').toISOString(),
                     status: 'pending'
                 },
                 {
@@ -223,10 +223,12 @@
                     rooms: 5,
                     details: "Traditional riad for renovation. Authentic features preferred.",
                     premium: true,
-                    timestamp: new Date('2025-11-24T14:20:00'),
+                    timestamp: new Date('2025-11-24T14:20:00').toISOString(),
                     status: 'pending'
                 }
             ];
+            // Save sample data to localStorage so it persists
+            localStorage.setItem('customerRequests', JSON.stringify(customerRequests));
         }
 
         // Update statistics
