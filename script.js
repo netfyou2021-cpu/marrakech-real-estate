@@ -1,6 +1,13 @@
 let map;
 let markers = [];
 
+// Supported languages
+const supportedLanguages = [
+  { code: 'en', name: 'English' },
+  { code: 'fr', name: 'Français' },
+  { code: 'ar', name: 'العربية' }
+];
+
 // Initialize Leaflet Map
 function initMap() {
   if (map) return; // Already initialized
