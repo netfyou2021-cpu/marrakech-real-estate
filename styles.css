@@ -23,7 +23,7 @@ nav ul li a:hover{color:var(--accent)}
 .language-dropdown button:hover{background:#f0f7ff}
 .language-dropdown button.active{background:#e3f2fd;color:#0066cc;font-weight:600}
 .hero{padding:5rem 1rem;min-height:60vh;background-size:cover;background-position:center;color:#fff;position:relative;overflow:hidden;display:flex;align-items:center;animation:slideshow 30s ease-in-out infinite}
-@keyframes slideshow{0%,33%{background-image:url('hero-marrakech.jpg');background-size:102%;background-position:center}34%,66%{background-image:url('hero-2.jpg');background-size:102%;background-position:center}67%,100%{background-image:url('hero-3.jpg');background-size:102%;background-position:center}}
+@keyframes slideshow{0%,33%{background-image:url('hero-marrakech.jpg');background-size:100%;background-position:center}34%,66%{background-image:url('hero-2.jpg');background-size:100%;background-position:center}67%,100%{background-image:url('hero-3.jpg');background-size:100%;background-position:center}}
 .hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.7) 100%);z-index:1;animation:fadeOverlay 30s ease-in-out infinite}
 @keyframes fadeOverlay{0%,33%{opacity:0.85}34%,66%{opacity:0.75}67%,100%{opacity:0.8}}
 .hero>*{position:relative;z-index:2}
