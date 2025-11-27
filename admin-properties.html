@@ -68,6 +68,33 @@
             </div>
         </div>
 
+        <!-- Quick Actions Section -->
+        <div class="properties-container" style="margin-bottom: 2rem;">
+            <h2 style="margin-bottom: 1rem;">⚡ Quick Actions</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                <div style="background: linear-gradient(135deg, #c14b1a, #d2691e); color: white; padding: 2rem; border-radius: 12px; text-align: center; cursor: pointer; transition: transform 0.2s;" onclick="showAddForm()">
+                    <div style="font-size: 3rem; margin-bottom: 0.5rem;">➕</div>
+                    <h3 style="margin-bottom: 0.5rem;">Add New Property</h3>
+                    <p style="opacity: 0.9; font-size: 0.9rem;">Create a new listing</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #4caf50, #45a049); color: white; padding: 2rem; border-radius: 12px; text-align: center; cursor: pointer; transition: transform 0.2s;" onclick="bulkPublish()">
+                    <div style="font-size: 3rem; margin-bottom: 0.5rem;">📤</div>
+                    <h3 style="margin-bottom: 0.5rem;">Publish All</h3>
+                    <p style="opacity: 0.9; font-size: 0.9rem;">Make all properties visible</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #ff9800, #f57c00); color: white; padding: 2rem; border-radius: 12px; text-align: center; cursor: pointer; transition: transform 0.2s;" onclick="bulkUnpublish()">
+                    <div style="font-size: 3rem; margin-bottom: 0.5rem;">📥</div>
+                    <h3 style="margin-bottom: 0.5rem;">Unpublish All</h3>
+                    <p style="opacity: 0.9; font-size: 0.9rem;">Hide all properties</p>
+                </div>
+                <div style="background: linear-gradient(135deg, #f44336, #d32f2f); color: white; padding: 2rem; border-radius: 12px; text-align: center; cursor: pointer; transition: transform 0.2s;" onclick="clearAllProperties()">
+                    <div style="font-size: 3rem; margin-bottom: 0.5rem;">🗑️</div>
+                    <h3 style="margin-bottom: 0.5rem;">Clear All</h3>
+                    <p style="opacity: 0.9; font-size: 0.9rem;">Delete all properties</p>
+                </div>
+            </div>
+        </div>
+
         <div class="properties-container">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
                 <h2>Property Listings</h2>
@@ -363,6 +390,42 @@
             renderProperties();
             updateStats();
         });
+
+        // Bulk actions
+        function bulkPublish() {
+            if (confirm(`Publish all ${properties.length} properties? They will be visible on the website.`)) {
+                properties.forEach(p => p.published = true);
+                saveProperties();
+                renderProperties();
+                updateStats();
+                alert('All properties published successfully!');
+            }
+        }
+
+        function bulkUnpublish() {
+            if (confirm(`Unpublish all ${properties.length} properties? They will be hidden from the website.`)) {
+                properties.forEach(p => p.published = false);
+                saveProperties();
+                renderProperties();
+                updateStats();
+                alert('All properties unpublished successfully!');
+            }
+        }
+
+        function clearAllProperties() {
+            if (confirm('⚠️ WARNING: This will delete ALL properties permanently. Are you sure?')) {
+                if (confirm('This action cannot be undone. Type YES in the next prompt to confirm.')) {
+                    const confirmation = prompt('Type YES to delete all properties:');
+                    if (confirmation === 'YES') {
+                        properties = [];
+                        saveProperties();
+                        renderProperties();
+                        updateStats();
+                        alert('All properties deleted successfully!');
+                    }
+                }
+            }
+        }
 
         // Initialize
         loadProperties();
