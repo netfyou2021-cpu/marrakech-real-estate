@@ -465,6 +465,24 @@ const languageBtn = document.getElementById('language-btn');
 const languageDropdown = document.getElementById('language-dropdown');
 const currentLangSpan = document.querySelector('.current-lang');
 
+// Logo click handler - reset to English and go to home
+const logoLink = document.getElementById('logo-link');
+if (logoLink) {
+  logoLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    // Reset to English
+    document.documentElement.setAttribute('dir', 'ltr');
+    document.documentElement.setAttribute('lang', 'en');
+    currentLangSpan.textContent = 'EN';
+    applyTranslationsFor('en');
+    // Update active language
+    languageDropdown.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    languageDropdown.querySelector('button[data-lang="en"]').classList.add('active');
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
 if (languageBtn && languageDropdown) {
   // Toggle dropdown
   languageBtn.addEventListener('click', (e) => {
