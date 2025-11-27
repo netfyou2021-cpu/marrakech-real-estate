@@ -12,9 +12,16 @@ nav{max-width:var(--max-width);margin:0 auto;display:flex;align-items:center;gap
 .nav-center{list-style:none;margin:0;padding:0;display:flex;gap:2rem;margin-right:auto}
 nav ul li a{color:var(--muted);text-decoration:none;font-weight:500;transition:color 0.2s;font-size:1rem}
 nav ul li a:hover{color:var(--accent)}
-.language-wrapper{display:flex;align-items:center;gap:0.5rem}
-.language-icon{width:20px;height:20px;opacity:0.7}
-#language-select{padding:0.4rem 2rem 0.4rem 0.8rem;border:1px solid #ddd;border-radius:6px;background:#fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8"><path fill="%23666" d="M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z"/></svg>') no-repeat right 0.5rem center;background-size:12px;appearance:none;cursor:pointer;font-size:0.9rem;color:#666}
+.language-wrapper{position:relative}
+.language-btn{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.8rem;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer;font-size:0.9rem;color:#666;transition:all 0.2s}
+.language-btn:hover{border-color:var(--accent);background:#fff8f0}
+.language-icon{width:20px;height:20px;color:#0066cc}
+.current-lang{font-weight:500;color:#333}
+.language-dropdown{position:absolute;top:calc(100% + 0.5rem);right:0;background:#fff;border:1px solid #ddd;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);min-width:150px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all 0.3s;z-index:1000}
+.language-dropdown.show{opacity:1;visibility:visible;transform:translateY(0)}
+.language-dropdown button{display:block;width:100%;padding:0.75rem 1rem;border:none;background:none;text-align:left;cursor:pointer;font-size:0.95rem;color:#333;transition:background 0.2s}
+.language-dropdown button:hover{background:#f5f5f5}
+.language-dropdown button.active{background:#e3f2fd;color:#0066cc;font-weight:600}
 .hero{padding:5rem 1rem;min-height:60vh;background-size:cover;background-position:center;color:#fff;position:relative;overflow:hidden;display:flex;align-items:center;animation:slideshow 30s ease-in-out infinite}
 @keyframes slideshow{0%,33%{background-image:url('hero-marrakech.jpg');background-size:105%;background-position:center}34%,66%{background-image:url('hero-2.jpg');background-size:105%;background-position:center}67%,100%{background-image:url('hero-3.jpg');background-size:105%;background-position:center}}
 .hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.7) 100%);z-index:1;animation:fadeOverlay 30s ease-in-out infinite}
