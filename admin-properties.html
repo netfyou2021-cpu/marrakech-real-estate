@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Management - Admin</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; padding: 2rem; }
+        .admin-container { max-width: 1400px; margin: 0 auto; }
+        .header { background: linear-gradient(135deg, #c14b1a, #d2691e); color: white; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; }
+        .header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        .nav-links { display: flex; gap: 1rem; margin-top: 1rem; }
+        .nav-link { background: rgba(255,255,255,0.2); color: white; padding: 0.5rem 1rem; border-radius: 6px; text-decoration: none; transition: all 0.2s; }
+        .nav-link:hover { background: rgba(255,255,255,0.3); }
+        .nav-link.active { background: white; color: #c14b1a; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .stat-card h3 { color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .stat-card .number { font-size: 2rem; font-weight: bold; color: #c14b1a; }
+        .properties-container { background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .btn { padding: 0.6rem 1.2rem; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .btn-add { background: #c14b1a; color: white; font-size: 1rem; }
+        .btn-edit { background: #ff9800; color: white; }
+        .btn-delete { background: #f44336; color: white; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .property-card { background: #fafafa; border: 2px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; display: grid; grid-template-columns: 200px 1fr auto; gap: 1.5rem; align-items: start; }
+        .property-image { width: 200px; height: 150px; object-fit: cover; border-radius: 8px; }
+        .property-info h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .property-meta { color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .property-actions { display: flex; flex-direction: column; gap: 0.5rem; }
+        .form-container { display: none; background: #fff8f0; border: 2px solid #c14b1a; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #555; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px; font-family: inherit; }
+        .form-actions { display: flex; gap: 1rem; margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="header">
+            <h1>🏢 Website Management Dashboard</h1>
+            <p>Manage properties, settings, and content</p>
+            <div class="nav-links">
+                <a href="admin-properties.html" class="nav-link active">🏠 Properties</a>
+                <a href="admin.html" class="nav-link">📋 Customer Requests</a>
+                <a href="/" class="nav-link">🌐 View Website</a>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3>Total Properties</h3>
+                <div class="number" id="total-properties">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>For Sale</h3>
+                <div class="number" id="for-sale">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>For Rent</h3>
+                <div class="number" id="for-rent">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Published</h3>
+                <div class="number" id="published">0</div>
+            </div>
+        </div>
+
+        <div class="properties-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h2>Property Listings</h2>
+                <button class="btn btn-add" onclick="showAddForm()">➕ Add New Property</button>
+            </div>
+
+            <!-- Property Form -->
+            <div id="property-form-container" class="form-container">
+                <h3 id="form-title">Add New Property</h3>
+                <form id="property-form">
+                    <input type="hidden" id="edit-id">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Title *</label>
+                            <input type="text" id="prop-title" required placeholder="Luxury Villa in Palmeraie">
+                        </div>
+                        <div class="form-group">
+                            <label>Type *</label>
+                            <select id="prop-type" required>
+                                <option value="">Select type</option>
+                                <option value="apartment">Apartment</option>
+                                <option value="villa">Villa</option>
+                                <option value="house">House</option>
+                                <option value="riad">Riad</option>
+                                <option value="land">Land</option>
+                                <option value="garage">Garage</option>
+                                <option value="commercial">Commercial</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Action *</label>
+                            <select id="prop-action" required>
+                                <option value="">Select action</option>
+                                <option value="rent">For Rent</option>
+                                <option value="buy">For Sale</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Price (MAD) *</label>
+                            <input type="number" id="prop-price" required placeholder="2500000">
+                        </div>
+                        <div class="form-group">
+                            <label>Location *</label>
+                            <input type="text" id="prop-location" required placeholder="Palmeraie, Marrakech">
+                        </div>
+                        <div class="form-group">
+                            <label>Surface (m²) *</label>
+                            <input type="number" id="prop-surface" required placeholder="350">
+                        </div>
+                        <div class="form-group">
+                            <label>Rooms</label>
+                            <input type="number" id="prop-rooms" placeholder="4">
+                        </div>
+                        <div class="form-group">
+                            <label>Bathrooms</label>
+                            <input type="number" id="prop-bathrooms" placeholder="3">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="prop-description" rows="4" placeholder="Describe the property..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>📷 Main Image URL *</label>
+                        <input type="url" id="prop-image" required placeholder="https://example.com/image.jpg">
+                    </div>
+
+                    <div class="form-group">
+                        <label>📸 Additional Images (one URL per line)</label>
+                        <textarea id="prop-images" rows="3" placeholder="https://example.com/image2.jpg&#10;https://example.com/image3.jpg"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🗺️ Coordinates (latitude, longitude)</label>
+                        <input type="text" id="prop-coordinates" placeholder="31.6295, -7.9811">
+                        <small style="color: #666;">Get coordinates from <a href="https://www.google.com/maps" target="_blank">Google Maps</a></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" id="prop-published" style="width: auto;">
+                            <span>Published (visible on website)</span>
+                        </label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-add" style="flex: 1;">💾 Save Property</button>
+                        <button type="button" class="btn btn-delete" onclick="cancelForm()" style="flex: 1;">✖ Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="properties-list">
+                <p style="text-align: center; color: #999; padding: 2rem;">Loading properties...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let properties = [];
+
+        // Load properties from API or localStorage
+        async function loadProperties() {
+            try {
+                const response = await fetch('/api/listings');
+                if (response.ok) {
+                    properties = await response.json();
+                } else {
+                    // Fallback to localStorage
+                    properties = JSON.parse(localStorage.getItem('properties') || '[]');
+                }
+            } catch (error) {
+                properties = JSON.parse(localStorage.getItem('properties') || '[]');
+            }
+            
+            updateStats();
+            renderProperties();
+        }
+
+        // Update statistics
+        function updateStats() {
+            document.getElementById('total-properties').textContent = properties.length;
+            document.getElementById('for-sale').textContent = properties.filter(p => p.action === 'buy').length;
+            document.getElementById('for-rent').textContent = properties.filter(p => p.action === 'rent').length;
+            document.getElementById('published').textContent = properties.filter(p => p.published !== false).length;
+        }
+
+        // Render properties list
+        function renderProperties() {
+            const container = document.getElementById('properties-list');
+            
+            if (properties.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #999; padding: 2rem;">No properties yet. Click "Add New Property" to get started.</p>';
+                return;
+            }
+
+            container.innerHTML = properties.map(prop => `
+                <div class="property-card">
+                    <img src="${prop.image || prop.images?.[0] || 'placeholder.jpg'}" alt="${prop.title}" class="property-image">
+                    <div class="property-info">
+                        <h3>${prop.title}</h3>
+                        <div class="property-meta">
+                            📍 ${prop.location} | 
+                            ${prop.type.charAt(0).toUpperCase() + prop.type.slice(1)} | 
+                            ${prop.action === 'rent' ? '🔑 For Rent' : '💰 For Sale'}
+                        </div>
+                        <div class="property-meta">
+                            💵 ${parseInt(prop.price).toLocaleString()} MAD | 
+                            📐 ${prop.surface}m² | 
+                            🛏️ ${prop.rooms || 'N/A'} rooms | 
+                            🚿 ${prop.bathrooms || 'N/A'} baths
+                        </div>
+                        <div style="margin-top: 0.5rem;">
+                            ${prop.published === false ? '<span style="background: #ff9800; color: white; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem;">📝 Draft</span>' : '<span style="background: #4caf50; color: white; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.85rem;">✓ Published</span>'}
+                        </div>
+                        <p style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">${prop.description ? (prop.description.substring(0, 150) + '...') : 'No description'}</p>
+                    </div>
+                    <div class="property-actions">
+                        <button class="btn btn-edit" onclick="editProperty(${prop.id})">✏️ Edit</button>
+                        <button class="btn btn-delete" onclick="deleteProperty(${prop.id})">🗑️ Delete</button>
+                        ${prop.published === false ? 
+                            `<button class="btn btn-add" onclick="togglePublish(${prop.id}, true)">📤 Publish</button>` : 
+                            `<button class="btn" style="background: #ff9800; color: white;" onclick="togglePublish(${prop.id}, false)">📥 Unpublish</button>`
+                        }
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Show add form
+        function showAddForm() {
+            document.getElementById('property-form-container').style.display = 'block';
+            document.getElementById('form-title').textContent = 'Add New Property';
+            document.getElementById('property-form').reset();
+            document.getElementById('edit-id').value = '';
+            document.getElementById('prop-published').checked = true;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Cancel form
+        function cancelForm() {
+            document.getElementById('property-form-container').style.display = 'none';
+            document.getElementById('property-form').reset();
+        }
+
+        // Edit property
+        function editProperty(id) {
+            const property = properties.find(p => p.id === id);
+            if (!property) return;
+
+            document.getElementById('property-form-container').style.display = 'block';
+            document.getElementById('form-title').textContent = 'Edit Property';
+            document.getElementById('edit-id').value = property.id;
+            document.getElementById('prop-title').value = property.title;
+            document.getElementById('prop-type').value = property.type;
+            document.getElementById('prop-action').value = property.action;
+            document.getElementById('prop-price').value = property.price;
+            document.getElementById('prop-location').value = property.location;
+            document.getElementById('prop-surface').value = property.surface;
+            document.getElementById('prop-rooms').value = property.rooms || '';
+            document.getElementById('prop-bathrooms').value = property.bathrooms || '';
+            document.getElementById('prop-description').value = property.description || '';
+            document.getElementById('prop-image').value = property.image || (property.images && property.images[0]) || '';
+            document.getElementById('prop-images').value = property.images ? property.images.slice(1).join('\n') : '';
+            document.getElementById('prop-coordinates').value = property.coordinates ? `${property.coordinates.lat}, ${property.coordinates.lng}` : '';
+            document.getElementById('prop-published').checked = property.published !== false;
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Delete property
+        function deleteProperty(id) {
+            if (confirm('Are you sure you want to delete this property?')) {
+                properties = properties.filter(p => p.id !== id);
+                saveProperties();
+                renderProperties();
+                updateStats();
+                alert('Property deleted successfully!');
+            }
+        }
+
+        // Toggle publish status
+        function togglePublish(id, status) {
+            const property = properties.find(p => p.id === id);
+            if (property) {
+                property.published = status;
+                saveProperties();
+                renderProperties();
+                updateStats();
+                alert(`Property ${status ? 'published' : 'unpublished'} successfully!`);
+            }
+        }
+
+        // Save properties to localStorage
+        function saveProperties() {
+            localStorage.setItem('properties', JSON.stringify(properties));
+        }
+
+        // Handle form submission
+        document.getElementById('property-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const editId = document.getElementById('edit-id').value;
+            const images = [document.getElementById('prop-image').value];
+            const additionalImages = document.getElementById('prop-images').value
+                .split('\n')
+                .map(url => url.trim())
+                .filter(url => url);
+            images.push(...additionalImages);
+
+            const coordsInput = document.getElementById('prop-coordinates').value.trim();
+            let coordinates = null;
+            if (coordsInput) {
+                const [lat, lng] = coordsInput.split(',').map(c => parseFloat(c.trim()));
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    coordinates = { lat, lng };
+                }
+            }
+
+            const propertyData = {
+                id: editId ? parseInt(editId) : Date.now(),
+                title: document.getElementById('prop-title').value,
+                type: document.getElementById('prop-type').value,
+                action: document.getElementById('prop-action').value,
+                price: parseInt(document.getElementById('prop-price').value),
+                location: document.getElementById('prop-location').value,
+                surface: parseInt(document.getElementById('prop-surface').value),
+                rooms: parseInt(document.getElementById('prop-rooms').value) || null,
+                bathrooms: parseInt(document.getElementById('prop-bathrooms').value) || null,
+                description: document.getElementById('prop-description').value,
+                image: images[0],
+                images: images,
+                coordinates: coordinates,
+                published: document.getElementById('prop-published').checked,
+                created_at: editId ? properties.find(p => p.id === parseInt(editId)).created_at : new Date().toISOString()
+            };
+
+            if (editId) {
+                const index = properties.findIndex(p => p.id === parseInt(editId));
+                if (index !== -1) {
+                    properties[index] = propertyData;
+                    alert('Property updated successfully!');
+                }
+            } else {
+                properties.push(propertyData);
+                alert('Property added successfully!');
+            }
+
+            saveProperties();
+            cancelForm();
+            renderProperties();
+            updateStats();
+        });
+
+        // Initialize
+        loadProperties();
+    </script>
+</body>
+</html>
