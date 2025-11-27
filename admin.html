@@ -129,6 +129,15 @@
                         <textarea id="req-details" rows="3" style="width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px;"></textarea>
                     </div>
                     <div style="grid-column: 1/-1;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #555;">📷 Property Images (Optional)</label>
+                        <div style="background: white; padding: 1rem; border: 2px dashed #c14b1a; border-radius: 8px;">
+                            <input type="file" id="req-images" accept="image/*" multiple style="margin-bottom: 0.5rem;">
+                            <p style="font-size: 0.85rem; color: #666; margin: 0.5rem 0 0 0;">Or paste image URLs (one per line):</p>
+                            <textarea id="req-image-urls" rows="3" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg" style="width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px; margin-top: 0.5rem; font-family: monospace; font-size: 0.9rem;"></textarea>
+                            <div id="image-preview" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 0.5rem; margin-top: 1rem;"></div>
+                        </div>
+                    </div>
+                    <div style="grid-column: 1/-1;">
                         <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
                             <input type="checkbox" id="req-premium" style="width: 18px; height: 18px;">
                             <span style="font-weight: 600; color: #555;">Premium Request (Priority Service)</span>
@@ -296,6 +305,17 @@
                         <p>${req.details || 'No additional requirements specified.'}</p>
                     </div>
                     
+                    ${req.images && req.images.length > 0 ? `
+                        <div style="margin-top: 1rem;">
+                            <strong style="display: block; margin-bottom: 0.5rem;">📷 Property Images:</strong>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.5rem;">
+                                ${req.images.map(img => `
+                                    <img src="${img}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; border: 2px solid #ddd; cursor: pointer;" onclick="window.open('${img}', '_blank')" alt="Property image">
+                                `).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
                     <div class="request-actions">
                         <button class="btn btn-edit" onclick="editRequest(${req.id})">
                             ✏️ Edit
@@ -366,6 +386,7 @@
             document.getElementById('form-title').textContent = 'Add New Request';
             document.getElementById('request-form').reset();
             document.getElementById('edit-id').value = '';
+            document.getElementById('image-preview').innerHTML = '';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -373,6 +394,7 @@
         function cancelForm() {
             document.getElementById('request-form-container').style.display = 'none';
             document.getElementById('request-form').reset();
+            document.getElementById('image-preview').innerHTML = '';
         }
 
         // Edit request
@@ -393,8 +415,57 @@
             document.getElementById('req-rooms').value = request.rooms || '';
             document.getElementById('req-details').value = request.details || '';
             document.getElementById('req-premium').checked = request.premium || false;
+            document.getElementById('req-image-urls').value = request.images ? request.images.join('\n') : '';
+            
+            // Show image preview if images exist
+            if (request.images && request.images.length > 0) {
+                updateImagePreview(request.images);
+            }
             
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Handle image file selection
+        document.getElementById('req-images').addEventListener('change', function(e) {
+            const files = e.target.files;
+            const preview = document.getElementById('image-preview');
+            preview.innerHTML = '';
+            
+            for (let file of files) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = document.createElement('img');
+                    img.src = event.target.result;
+                    img.style.cssText = 'width: 100%; height: 100px; object-fit: cover; border-radius: 6px; border: 2px solid #ddd;';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Handle image URL input
+        document.getElementById('req-image-urls').addEventListener('input', function(e) {
+            const urls = e.target.value.split('\n').filter(url => url.trim());
+            updateImagePreview(urls);
+        });
+
+        // Update image preview
+        function updateImagePreview(urls) {
+            const preview = document.getElementById('image-preview');
+            preview.innerHTML = '';
+            
+            urls.forEach(url => {
+                if (url.trim()) {
+                    const img = document.createElement('img');
+                    img.src = url.trim();
+                    img.style.cssText = 'width: 100%; height: 100px; object-fit: cover; border-radius: 6px; border: 2px solid #ddd;';
+                    img.onerror = function() {
+                        this.style.border = '2px solid #f44336';
+                        this.alt = 'Failed to load';
+                    };
+                    preview.appendChild(img);
+                }
+            });
         }
 
         // Handle form submission
@@ -402,6 +473,13 @@
             e.preventDefault();
             
             const editId = document.getElementById('edit-id').value;
+            
+            // Get image URLs
+            const imageUrls = document.getElementById('req-image-urls').value
+                .split('\n')
+                .map(url => url.trim())
+                .filter(url => url);
+            
             const requestData = {
                 id: editId ? parseInt(editId) : Date.now(),
                 name: document.getElementById('req-name').value,
@@ -414,6 +492,7 @@
                 rooms: document.getElementById('req-rooms').value || null,
                 details: document.getElementById('req-details').value || '',
                 premium: document.getElementById('req-premium').checked,
+                images: imageUrls,
                 timestamp: editId ? customerRequests.find(r => r.id === parseInt(editId)).timestamp : new Date().toISOString(),
                 status: 'pending'
             };
