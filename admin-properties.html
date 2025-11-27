@@ -35,6 +35,16 @@
         .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #555; }
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px; font-family: inherit; }
         .form-actions { display: flex; gap: 1rem; margin-top: 1rem; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; overflow: auto; }
+        .modal-content { background: white; margin: 2rem auto; padding: 2rem; border-radius: 12px; max-width: 900px; position: relative; }
+        .modal-close { position: absolute; top: 1rem; right: 1rem; font-size: 2rem; cursor: pointer; color: #999; }
+        .modal-close:hover { color: #000; }
+        .image-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.5rem; margin-top: 1rem; }
+        .image-thumb { position: relative; width: 100%; height: 120px; border-radius: 8px; overflow: hidden; cursor: move; border: 2px solid #ddd; }
+        .image-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .image-thumb .remove-btn { position: absolute; top: 4px; right: 4px; background: #f44336; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 14px; }
+        .image-thumb .main-badge { position: absolute; top: 4px; left: 4px; background: #4caf50; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; }
+        .preview-section { margin: 1rem 0; padding: 1rem; background: #f5f5f5; border-radius: 8px; }
     </style>
 </head>
 <body>
@@ -214,6 +224,12 @@
                         </div>
                     </div>
 
+                    <div class="form-group" style="grid-column: 1/-1;">
+                        <label>📷 Image Gallery (Drag to reorder, first image is main)</label>
+                        <div id="image-gallery" class="image-gallery"></div>
+                        <p style="font-size: 0.85rem; color: #666; margin-top: 0.5rem;">💡 Tip: Drag images to reorder. The first image will be the main thumbnail.</p>
+                    </div>
+
                     <div class="form-group">
                         <label>🗺️ Coordinates (latitude, longitude)</label>
                         <input type="text" id="prop-coordinates" placeholder="31.6295, -7.9811">
@@ -360,12 +376,14 @@
                         <p style="margin-top: 0.5rem; color: #666; font-size: 0.9rem;">${prop.description ? (prop.description.substring(0, 150) + '...') : 'No description'}</p>
                     </div>
                     <div class="property-actions">
+                        <button class="btn" style="background: #2196f3; color: white;" onclick="previewProperty(${prop.id})">👁️ Preview</button>
                         <button class="btn btn-edit" onclick="editProperty(${prop.id})">✏️ Edit</button>
                         <button class="btn btn-delete" onclick="deleteProperty(${prop.id})">🗑️ Delete</button>
                         ${prop.published === false ? 
-                            `<button class="btn btn-add" onclick="togglePublish(${prop.id}, true)">📤 Publish</button>` : 
+                            `<button class="btn btn-add" onclick="previewBeforePublish(${prop.id})">📤 Publish</button>` : 
                             `<button class="btn" style="background: #ff9800; color: white;" onclick="togglePublish(${prop.id}, false)">📥 Unpublish</button>`
                         }
+                        <small style="color: #999; margin-top: 0.5rem;">📷 ${(prop.images || []).length} image(s)</small>
                     </div>
                 </div>
             `).join('');
@@ -412,6 +430,9 @@
             document.getElementById('prop-images').value = property.images ? property.images.slice(1).join('\n') : '';
             document.getElementById('prop-coordinates').value = property.coordinates ? `${property.coordinates.lat}, ${property.coordinates.lng}` : '';
             document.getElementById('prop-published').checked = property.published !== false;
+            
+            // Render image gallery
+            renderImageGallery(property.images || []);
             
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -560,6 +581,195 @@
 
         // Initialize
         loadProperties();
+
+        // Preview property before publishing
+        function previewBeforePublish(id) {
+            previewProperty(id, () => {
+                if (confirm('Looks good? Publish this property now?')) {
+                    togglePublish(id, true);
+                }
+            });
+        }
+
+        // Preview property in modal
+        function previewProperty(id, callback) {
+            const property = properties.find(p => p.id === id);
+            if (!property) return;
+
+            const modal = document.getElementById('preview-modal');
+            const content = document.getElementById('preview-content');
+            
+            content.innerHTML = `
+                <h2 style="color: #c14b1a; margin-bottom: 1rem;">${property.title}</h2>
+                
+                <div class="preview-section">
+                    <h3>📷 Images (${(property.images || []).length})</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        ${(property.images || []).map((img, idx) => `
+                            <div style="position: relative; cursor: pointer;">
+                                <img src="${img}" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; border: 2px solid ${idx === 0 ? '#4caf50' : '#ddd'};" onclick="viewFullImage('${img.replace(/'/g, "\\'")}')">
+                                ${idx === 0 ? '<div style="position: absolute; top: 4px; left: 4px; background: #4caf50; color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px;">MAIN</div>' : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="preview-section">
+                    <h3>📋 Details</h3>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1rem;">
+                        <div><strong>Type:</strong> ${property.type}</div>
+                        <div><strong>Action:</strong> ${property.action === 'rent' ? 'For Rent' : 'For Sale'}</div>
+                        <div><strong>Price:</strong> ${parseInt(property.price).toLocaleString()} MAD</div>
+                        <div><strong>Location:</strong> ${property.location}</div>
+                        <div><strong>Surface:</strong> ${property.surface}m²</div>
+                        <div><strong>Rooms:</strong> ${property.rooms || 'N/A'}</div>
+                        <div><strong>Bathrooms:</strong> ${property.bathrooms || 'N/A'}</div>
+                        <div><strong>Status:</strong> ${property.published === false ? '📝 Draft' : '✓ Published'}</div>
+                    </div>
+                </div>
+
+                <div class="preview-section">
+                    <h3>📝 Description</h3>
+                    <p style="margin-top: 0.5rem; white-space: pre-wrap;">${property.description || 'No description'}</p>
+                </div>
+
+                ${callback ? '<button class="btn btn-add" style="width: 100%; margin-top: 1rem; padding: 1rem; font-size: 1.1rem;" onclick="closePreviewAndPublish()">✅ Looks Good - Publish Now</button>' : ''}
+            `;
+            
+            modal.style.display = 'block';
+            window.previewCallback = callback;
+        }
+
+        function closePreviewAndPublish() {
+            document.getElementById('preview-modal').style.display = 'none';
+            if (window.previewCallback) {
+                window.previewCallback();
+                window.previewCallback = null;
+            }
+        }
+
+        function viewFullImage(src) {
+            const modal = document.getElementById('image-modal');
+            document.getElementById('full-image').src = src;
+            modal.style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Image sorting variables
+        let draggedImageIndex = null;
+
+        function renderImageGallery(images) {
+            const gallery = document.getElementById('image-gallery');
+            if (!images || images.length === 0) {
+                gallery.innerHTML = '<p style="color: #999; text-align: center; padding: 2rem;">No images yet. Add images above to see them here.</p>';
+                return;
+            }
+            gallery.innerHTML = images.map((img, idx) => `
+                <div class="image-thumb" draggable="true" data-index="${idx}" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondrop="drop(event)" ondragend="dragEnd(event)">
+                    ${idx === 0 ? '<div class="main-badge">MAIN</div>' : ''}
+                    <img src="${img}" alt="Image ${idx + 1}">
+                    <button class="remove-btn" onclick="removeImage(${idx})" title="Remove image">×</button>
+                </div>
+            `).join('');
+        }
+
+        function dragStart(e) {
+            draggedImageIndex = parseInt(e.target.closest('.image-thumb').dataset.index);
+            e.target.closest('.image-thumb').style.opacity = '0.5';
+        }
+
+        function dragOver(e) {
+            e.preventDefault();
+        }
+
+        function drop(e) {
+            e.preventDefault();
+            const dropTarget = e.target.closest('.image-thumb');
+            if (!dropTarget) return;
+            
+            const dropIndex = parseInt(dropTarget.dataset.index);
+            if (draggedImageIndex !== null && draggedImageIndex !== dropIndex) {
+                const images = getCurrentFormImages();
+                const [movedImage] = images.splice(draggedImageIndex, 1);
+                images.splice(dropIndex, 0, movedImage);
+                updateFormImages(images);
+                renderImageGallery(images);
+            }
+        }
+
+        function dragEnd(e) {
+            e.target.closest('.image-thumb').style.opacity = '1';
+            draggedImageIndex = null;
+        }
+
+        function removeImage(index) {
+            if (confirm('Remove this image?')) {
+                const images = getCurrentFormImages();
+                images.splice(index, 1);
+                updateFormImages(images);
+                renderImageGallery(images);
+            }
+        }
+
+        function getCurrentFormImages() {
+            const images = [];
+            const mainImg = document.getElementById('prop-image').value.trim();
+            if (mainImg) images.push(mainImg);
+            
+            const additionalImgs = document.getElementById('prop-images').value
+                .split('\n')
+                .map(url => url.trim())
+                .filter(url => url);
+            images.push(...additionalImgs);
+            
+            return images;
+        }
+
+        function updateFormImages(images) {
+            if (images.length > 0) {
+                document.getElementById('prop-image').value = images[0];
+                document.getElementById('prop-images').value = images.slice(1).join('\n');
+            } else {
+                document.getElementById('prop-image').value = '';
+                document.getElementById('prop-images').value = '';
+            }
+        }
+
+        // Update image preview to show sortable gallery
+        document.getElementById('prop-image').addEventListener('input', updateGalleryPreview);
+        document.getElementById('prop-images').addEventListener('input', updateGalleryPreview);
+
+        function updateGalleryPreview() {
+            const images = getCurrentFormImages();
+            renderImageGallery(images);
+        }
     </script>
+
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('preview-modal')">&times;</span>
+            <div id="preview-content"></div>
+        </div>
+    </div>
+
+    <!-- Full Image Modal -->
+    <div id="image-modal" class="modal">
+        <div class="modal-content" style="max-width: 90%; max-height: 90vh;">
+            <span class="modal-close" onclick="closeModal('image-modal')">&times;</span>
+            <img id="full-image" style="width: 100%; height: auto; border-radius: 8px;">
+        </div>
+    </div>
+
 </body>
 </html>
