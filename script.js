@@ -61,6 +61,20 @@ if (document.readyState === 'loading') {
 let listings = [];
 
 async function fetchListingsFromApi(params = {}) {
+  // First, try to get properties from localStorage (admin panel)
+  const localProperties = JSON.parse(localStorage.getItem('properties') || '[]');
+  
+  // Filter only published properties
+  const publishedLocal = localProperties.filter(p => p.published !== false);
+  
+  if (publishedLocal.length > 0) {
+    // Use local properties if available
+    listings = publishedLocal;
+    console.log('Loaded properties from localStorage:', listings.length);
+    return { listings };
+  }
+  
+  // If no local properties, try API
   const qs = new URLSearchParams(params).toString();
   try {
     const res = await fetch('/api/listings' + (qs ? `?${qs}` : ''));
