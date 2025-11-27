@@ -13,17 +13,17 @@ nav{max-width:var(--max-width);margin:0 auto;display:flex;align-items:center;gap
 nav ul li a{color:var(--muted);text-decoration:none;font-weight:500;transition:color 0.2s;font-size:1rem}
 nav ul li a:hover{color:var(--accent)}
 .language-wrapper{position:relative}
-.language-btn{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.8rem;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer;font-size:0.9rem;color:#0066cc;font-weight:500;transition:all 0.2s}
-.language-btn:hover{border-color:#0066cc;background:#f0f7ff}
+.language-btn{display:flex;align-items:center;gap:0.5rem;padding:0;border:none;background:none;cursor:pointer;font-size:1rem;color:#0066cc;font-weight:400;transition:color 0.2s}
+.language-btn:hover{color:#0052a3}
 .language-icon{width:20px;height:20px;color:#0066cc}
-.current-lang{font-weight:500;color:#0066cc}
+.current-lang{font-weight:400;color:#0066cc;font-size:1rem}
 .language-dropdown{position:absolute;top:calc(100% + 0.5rem);right:0;background:#fff;border:1px solid #ddd;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);min-width:150px;opacity:0;visibility:hidden;transform:translateY(-10px);transition:all 0.3s;z-index:1000}
 .language-dropdown.show{opacity:1;visibility:visible;transform:translateY(0)}
 .language-dropdown button{display:block;width:100%;padding:0.75rem 1rem;border:none;background:none;text-align:left;cursor:pointer;font-size:0.95rem;color:#333;font-weight:400;transition:background 0.2s}
 .language-dropdown button:hover{background:#f0f7ff}
 .language-dropdown button.active{background:#e3f2fd;color:#0066cc;font-weight:600}
 .hero{padding:5rem 1rem;min-height:60vh;background-size:cover;background-position:center;color:#fff;position:relative;overflow:hidden;display:flex;align-items:center;animation:slideshow 30s ease-in-out infinite}
-@keyframes slideshow{0%,33%{background-image:url('hero-marrakech.jpg');background-size:105%;background-position:center}34%,66%{background-image:url('hero-2.jpg');background-size:105%;background-position:center}67%,100%{background-image:url('hero-3.jpg');background-size:105%;background-position:center}}
+@keyframes slideshow{0%,33%{background-image:url('hero-marrakech.jpg');background-size:102%;background-position:center}34%,66%{background-image:url('hero-2.jpg');background-size:102%;background-position:center}67%,100%{background-image:url('hero-3.jpg');background-size:102%;background-position:center}}
 .hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,0.5) 0%,rgba(0,0,0,0.7) 100%);z-index:1;animation:fadeOverlay 30s ease-in-out infinite}
 @keyframes fadeOverlay{0%,33%{opacity:0.85}34%,66%{opacity:0.75}67%,100%{opacity:0.8}}
 .hero>*{position:relative;z-index:2}
